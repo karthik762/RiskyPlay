@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const env = require('./config/env');
 const healthRoutes = require('./routes/healthRoutes');
+const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // Mount API routes under /api/v1
 app.use('/api/v1', healthRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
 
 // Catch-all 404 handler for unmatched routes
