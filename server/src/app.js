@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const env = require('./config/env');
 const healthRoutes = require('./routes/healthRoutes');
-const testRoutes = require('./routes/testRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -18,11 +18,7 @@ app.use(express.json());
 
 // Mount API routes under /api/v1
 app.use('/api/v1', healthRoutes);
-
-// Internal development / test-only routes (excluded in production)
-if (env.NODE_ENV !== 'production') {
-  app.use('/api/v1/test', testRoutes);
-}
+app.use('/api/v1/transactions', transactionRoutes);
 
 // Catch-all 404 handler for unmatched routes
 app.use(notFoundHandler);

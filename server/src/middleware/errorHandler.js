@@ -17,7 +17,7 @@ function notFoundHandler(req, res, next) {
 
 /**
  * Centralized error handling middleware.
- * Recognizes ZodError, AppError, and generic JavaScript errors.
+ * Recognizes ZodError, AppError, MongoDB Duplicate Key, Mongoose CastError, and generic errors.
  */
 function errorHandler(err, req, res, next) {
   // 1. Handle Zod validation errors
@@ -67,7 +67,42 @@ function errorHandler(err, req, res, next) {
     return res.status(err.statusCode || 400).json(response);
   }
 
-  // 3. Handle generic/unexpected errors
+  // 3. Handle MongoDB Duplicate Key (11000) error
+  if (err.code === 11000) {
+    const response = {
+      success: false,
+      error: {
+        code: 'DUPLICATE_TRANSACTION',
+        message:
+          'Transaction with this externalTransactionId already exists for this merchant',
+      },
+    };
+
+    if (env.NODE_ENV !== 'production' && err.stack) {
+      response.error.stack = err.stack;
+    }
+
+    return res.status(409).json(response);
+  }
+
+  // 4. Handle Mongoose CastError (e.g., malformed ObjectId)
+  if (err.name === 'CastError') {
+    const response = {
+      success: false,
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: `Invalid ${err.path}: ${err.value}`,
+      },
+    };
+
+    if (env.NODE_ENV !== 'production' && err.stack) {
+      response.error.stack = err.stack;
+    }
+
+    return res.status(400).json(response);
+  }
+
+  // 5. Handle generic/unexpected errors
   const statusCode =
     err.statusCode || (res.statusCode !== 200 && res.statusCode ? res.statusCode : 500);
 
