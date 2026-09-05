@@ -44,6 +44,37 @@ const ruleMatchSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const riskFactorSchema = new mongoose.Schema(
+  {
+    code: { type: String, trim: true },
+    description: { type: String, trim: true },
+    severity: {
+      type: String,
+      enum: {
+        values: ['LOW', 'MEDIUM', 'HIGH'],
+        message: '{VALUE} is not a valid risk factor severity',
+      },
+    },
+  },
+  { _id: false }
+);
+
+const aiAnalysisSchema = new mongoose.Schema(
+  {
+    status: {
+      type: String,
+      enum: ['SUCCESS', 'UNAVAILABLE', 'FAILED', 'SKIPPED'],
+      default: 'SKIPPED',
+    },
+    summary: { type: String, trim: true },
+    riskFactors: [riskFactorSchema],
+    aiTier: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH'] },
+    aiRecommendation: { type: String, enum: ['APPROVE', 'REVIEW', 'DECLINE'] },
+    error: { type: String, trim: true },
+  },
+  { _id: false }
+);
+
 const riskAssessmentSchema = new mongoose.Schema(
   {
     transactionId: {
@@ -86,6 +117,7 @@ const riskAssessmentSchema = new mongoose.Schema(
       max: [100, 'aiScore cannot exceed 100'],
       default: null,
     },
+    aiAnalysis: aiAnalysisSchema,
     recommendation: {
       type: String,
       required: true,

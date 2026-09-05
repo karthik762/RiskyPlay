@@ -347,6 +347,7 @@ describe('DETERMINISTIC RISK ENGINE — UNIT & HARDENING TESTS', () => {
         enforceRiskInvariants(0, 'LOW', 'APPROVE', 0, null);
         enforceRiskInvariants(35, 'MEDIUM', 'REVIEW', 35, null);
         enforceRiskInvariants(75, 'HIGH', 'DECLINE', 75, null);
+        enforceRiskInvariants(75, 'HIGH', 'DECLINE', 75, 80);
       });
     });
 
@@ -370,8 +371,11 @@ describe('DETERMINISTIC RISK ENGINE — UNIT & HARDENING TESTS', () => {
       assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 50, null), /must equal riskScore/);
     });
 
-    it('Rejects non-null aiScore in deterministic baseline', () => {
-      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, 85), /aiScore must remain null/);
+    it('Rejects invalid aiScore values', () => {
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, 105), /aiScore must be an integer between 0 and 100 or null/);
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, -5), /aiScore must be an integer between 0 and 100 or null/);
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, 45.5), /aiScore must be an integer between 0 and 100 or null/);
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, '85'), /aiScore must be an integer between 0 and 100 or null/);
     });
   });
 });

@@ -8,6 +8,7 @@ const {
   evaluateLargeQuantity,
 } = require('./riskRules');
 const { Transaction, RiskAssessment } = require('../models');
+const aiRiskService = require('./aiRiskService');
 const AppError = require('../utils/AppError');
 
 /**
@@ -18,7 +19,7 @@ const AppError = require('../utils/AppError');
  * @param {string} riskTier - Assigned risk tier ('LOW' | 'MEDIUM' | 'HIGH')
  * @param {string} recommendation - Assigned action ('APPROVE' | 'REVIEW' | 'DECLINE')
  * @param {number} baselineScore - Recorded baseline score
- * @param {number|null} aiScore - Recorded AI score (must be null for Phase 2 baseline)
+ * @param {number|null} aiScore - Recorded AI score (null or integer between 0 and 100)
  * @throws {AppError} If any invariant is violated
  */
 function enforceRiskInvariants(riskScore, riskTier, recommendation, baselineScore, aiScore) {
@@ -68,13 +69,15 @@ function enforceRiskInvariants(riskScore, riskTier, recommendation, baselineScor
     );
   }
 
-  // Invariant 5: aiScore must remain null because no AI scoring exists in Phase 2
+  // Invariant 5: aiScore must be null or an integer between 0 and 100
   if (aiScore !== null && aiScore !== undefined) {
-    throw new AppError(
-      `Internal Invariant Violation: aiScore must remain null in deterministic baseline, received ${aiScore}`,
-      500,
-      'INTERNAL_INVARIANT_ERROR'
-    );
+    if (!Number.isInteger(aiScore) || aiScore < 0 || aiScore > 100) {
+      throw new AppError(
+        `Internal Invariant Violation: aiScore must be an integer between 0 and 100 or null, received ${aiScore}`,
+        500,
+        'INTERNAL_INVARIANT_ERROR'
+      );
+    }
   }
 }
 
@@ -157,7 +160,7 @@ function formatRiskAssessment(assessment) {
 
   const id = (doc._id || doc.id)?.toString();
 
-  return {
+  const formatted = {
     id,
     _id: doc._id, // Retained for backward-compatibility with tests checking _id
     transactionId: doc.transactionId,
@@ -188,11 +191,31 @@ function formatRiskAssessment(assessment) {
       : [],
     createdAt: doc.createdAt,
   };
+
+  if (doc.aiAnalysis) {
+    formatted.aiAnalysis = {
+      status: doc.aiAnalysis.status,
+      summary: doc.aiAnalysis.summary,
+      riskFactors: Array.isArray(doc.aiAnalysis.riskFactors)
+        ? doc.aiAnalysis.riskFactors.map((rf) => ({
+            code: rf.code,
+            description: rf.description,
+            severity: rf.severity,
+          }))
+        : [],
+      aiTier: doc.aiAnalysis.aiTier,
+      aiRecommendation: doc.aiAnalysis.aiRecommendation,
+      error: doc.aiAnalysis.error,
+    };
+  }
+
+  return formatted;
 }
 
 /**
  * Assesses transaction risk for an authenticated merchant and persists the RiskAssessment document.
  * Enforces tenant ownership by querying for the transaction with both _id and merchantId.
+ * Executes AI risk analysis with graceful fallback to deterministic baseline.
  * Validates invariants prior to persistence.
  *
  * @param {string} merchantId - Authenticated merchant ObjectId
@@ -218,16 +241,56 @@ async function assessAndPersistRisk(merchantId, transactionId, config = riskConf
   // 2. Execute deterministic risk calculation
   const result = calculateRisk(transaction, config);
 
-  // 3. Enforce service-level data consistency invariants
+  // 3. Attempt AI Risk Analysis with Graceful Degradation
+  let aiScore = null;
+  let aiAnalysis = {
+    status: 'UNAVAILABLE',
+    summary: null,
+    riskFactors: [],
+    error: null,
+  };
+
+  try {
+    const aiResult = await aiRiskService.analyzeTransactionRisk(transaction, result);
+    if (aiResult.success) {
+      aiScore = aiResult.aiScore;
+      aiAnalysis = {
+        status: 'SUCCESS',
+        summary: aiResult.summary,
+        riskFactors: aiResult.riskFactors,
+        aiTier: aiResult.riskTier,
+        aiRecommendation: aiResult.recommendation,
+        error: null,
+      };
+    } else {
+      aiScore = null;
+      aiAnalysis = {
+        status: aiResult.status || 'UNAVAILABLE',
+        summary: null,
+        riskFactors: [],
+        error: aiResult.error || 'AI risk service unavailable',
+      };
+    }
+  } catch (err) {
+    aiScore = null;
+    aiAnalysis = {
+      status: 'UNAVAILABLE',
+      summary: null,
+      riskFactors: [],
+      error: err.message,
+    };
+  }
+
+  // 4. Enforce service-level data consistency invariants
   enforceRiskInvariants(
     result.riskScore,
     result.riskTier,
     result.recommendation,
     result.riskScore, // baselineScore
-    null              // aiScore
+    aiScore
   );
 
-  // 4. Persist RiskAssessment document
+  // 5. Persist RiskAssessment document
   const assessment = await RiskAssessment.create({
     transactionId: transaction._id,
     merchantId: transaction.merchantId,
@@ -235,7 +298,8 @@ async function assessAndPersistRisk(merchantId, transactionId, config = riskConf
     riskTier: result.riskTier,
     signals: result.signals,
     baselineScore: result.riskScore,
-    aiScore: null,
+    aiScore,
+    aiAnalysis,
     recommendation: result.recommendation,
     ruleMatches: result.ruleMatches,
   });
