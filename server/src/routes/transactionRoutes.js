@@ -1,4 +1,5 @@
 const express = require('express');
+const authenticate = require('../middleware/authenticate');
 const validate = require('../middleware/validate');
 const transactionController = require('../controllers/transactionController');
 const {
@@ -9,6 +10,9 @@ const {
 } = require('../validators/transactionValidators');
 
 const router = express.Router();
+
+// Enforce merchant authentication on all transaction routes
+router.use(authenticate);
 
 // POST /api/v1/transactions - Create transaction
 router.post(

@@ -4,13 +4,19 @@ const AppError = require('../utils/AppError');
 
 /**
  * Creates and persists a new transaction.
+ * Merchant ownership is strictly derived from the authenticated merchantId parameter.
+ * Any client-supplied merchantId is stripped/overridden.
  *
+ * @param {string} merchantId - Authenticated merchant ObjectId
  * @param {Object} data - Validated transaction data
  * @returns {Promise<Object>} Created transaction document
  */
-async function createTransaction(data) {
+async function createTransaction(merchantId, data) {
   try {
-    const transaction = await Transaction.create(data);
+    const { merchantId: _ignored, ...transactionData } = data;
+    transactionData.merchantId = merchantId;
+
+    const transaction = await Transaction.create(transactionData);
     return transaction;
   } catch (error) {
     if (error.code === 11000) {
@@ -25,25 +31,24 @@ async function createTransaction(data) {
 }
 
 /**
- * Retrieves a paginated and filtered list of transactions.
+ * Retrieves a paginated and filtered list of transactions strictly for the authenticated merchant.
  *
- * @param {Object} filters - Query filters (status, merchantId, from, to)
+ * @param {string} merchantId - Authenticated merchant ObjectId
+ * @param {Object} filters - Query filters (status, from, to)
  * @param {Object} pagination - Pagination options (page, limit)
  * @returns {Promise<Object>} Paginated transaction list
  */
-async function getTransactions(filters = {}, pagination = {}) {
+async function getTransactions(merchantId, filters = {}, pagination = {}) {
   const page = Math.max(1, parseInt(pagination.page, 10) || 1);
   const limit = Math.min(100, Math.max(1, parseInt(pagination.limit, 10) || 20));
   const skip = (page - 1) * limit;
 
-  const query = {};
+  const query = {
+    merchantId,
+  };
 
   if (filters.status) {
     query.status = filters.status;
-  }
-
-  if (filters.merchantId) {
-    query.merchantId = filters.merchantId;
   }
 
   if (filters.from || filters.to) {
@@ -79,17 +84,21 @@ async function getTransactions(filters = {}, pagination = {}) {
 }
 
 /**
- * Retrieves a single transaction by its MongoDB ObjectId.
+ * Retrieves a single transaction by its MongoDB ObjectId, strictly for the authenticated merchant.
  *
+ * @param {string} merchantId - Authenticated merchant ObjectId
  * @param {string} id - Transaction ObjectId
  * @returns {Promise<Object>} Transaction document
  */
-async function getTransactionById(id) {
+async function getTransactionById(merchantId, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new AppError('Invalid transaction ID', 400, 'VALIDATION_ERROR');
   }
 
-  const transaction = await Transaction.findById(id);
+  const transaction = await Transaction.findOne({
+    _id: id,
+    merchantId,
+  });
 
   if (!transaction) {
     throw new AppError('Transaction not found', 404, 'TRANSACTION_NOT_FOUND');
@@ -99,13 +108,14 @@ async function getTransactionById(id) {
 }
 
 /**
- * Updates the risk/settlement status of a transaction.
+ * Updates the risk/settlement status of a transaction, strictly for the authenticated merchant.
  *
+ * @param {string} merchantId - Authenticated merchant ObjectId
  * @param {string} id - Transaction ObjectId
  * @param {string} status - New transaction status
  * @returns {Promise<Object>} Updated transaction document
  */
-async function updateTransactionStatus(id, status) {
+async function updateTransactionStatus(merchantId, id, status) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new AppError('Invalid transaction ID', 400, 'VALIDATION_ERROR');
   }
@@ -119,10 +129,10 @@ async function updateTransactionStatus(id, status) {
     );
   }
 
-  const transaction = await Transaction.findByIdAndUpdate(
-    id,
+  const transaction = await Transaction.findOneAndUpdate(
+    { _id: id, merchantId },
     { status },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
 
   if (!transaction) {

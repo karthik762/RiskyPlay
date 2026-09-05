@@ -72,10 +72,11 @@ const cartItemSchema = z
   .strict('Unrecognized fields in cart item');
 
 // 1. Create Transaction Schema (POST /)
+// merchantId is optional if passed by client; always forced from authenticated req.user
 const createTransactionSchema = {
   body: z
     .object({
-      merchantId: objectIdSchema,
+      merchantId: objectIdSchema.optional(),
       externalTransactionId: z
         .string({ required_error: 'externalTransactionId is required' })
         .min(1, 'externalTransactionId cannot be empty')
@@ -99,6 +100,7 @@ const createTransactionSchema = {
 };
 
 // 2. List Transactions Schema (GET /)
+// merchantId is omitted from query params to enforce tenant isolation
 const listTransactionsSchema = {
   query: z
     .object({
@@ -114,7 +116,6 @@ const listTransactionsSchema = {
         .max(100, 'limit cannot exceed 100')
         .default(20),
       status: statusEnum.optional(),
-      merchantId: objectIdSchema.optional(),
       from: z.coerce.date().optional(),
       to: z.coerce.date().optional(),
     })
