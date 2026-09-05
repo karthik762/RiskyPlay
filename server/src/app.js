@@ -4,6 +4,7 @@ const env = require('./config/env');
 const healthRoutes = require('./routes/healthRoutes');
 const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const chargebackRoutes = require('./routes/chargebackRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/api/v1', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
+app.use('/api/v1/chargebacks', chargebackRoutes);
 
 // Catch-all 404 handler for unmatched routes
 app.use(notFoundHandler);

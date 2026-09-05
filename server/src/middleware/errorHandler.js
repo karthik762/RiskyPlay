@@ -69,12 +69,17 @@ function errorHandler(err, req, res, next) {
 
   // 3. Handle MongoDB Duplicate Key (11000) error
   if (err.code === 11000) {
+    const isChargeback =
+      (err.keyPattern && err.keyPattern.caseNumber) ||
+      (typeof err.message === 'string' && err.message.includes('caseNumber'));
+
     const response = {
       success: false,
       error: {
-        code: 'DUPLICATE_TRANSACTION',
-        message:
-          'Transaction with this externalTransactionId already exists for this merchant',
+        code: isChargeback ? 'DUPLICATE_CHARGEBACK' : 'DUPLICATE_TRANSACTION',
+        message: isChargeback
+          ? 'Chargeback with this caseNumber already exists for this merchant'
+          : 'Transaction with this externalTransactionId already exists for this merchant',
       },
     };
 

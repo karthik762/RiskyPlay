@@ -37,7 +37,6 @@ const evidenceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Transaction',
       required: [true, 'transactionId reference is required'],
-      index: true,
     },
     type: {
       type: String,

@@ -1,5 +1,34 @@
 const mongoose = require('mongoose');
 
+const CHARGEBACK_STATUSES = [
+  'OPEN',
+  'UNDER_REVIEW',
+  'RESPONSE_READY',
+  'SUBMITTED',
+  'WON',
+  'LOST',
+  'CLOSED',
+  'RECEIVED',
+  'EVIDENCE_GATHERING',
+  'RESPONSE_GENERATED',
+];
+
+const CHARGEBACK_NETWORKS = ['VISA', 'MASTERCARD', 'AMEX', 'OTHER'];
+
+const ALLOWED_TRANSITIONS = {
+  OPEN: ['UNDER_REVIEW', 'CLOSED'],
+  UNDER_REVIEW: ['RESPONSE_READY', 'CLOSED'],
+  RESPONSE_READY: ['SUBMITTED', 'CLOSED'],
+  SUBMITTED: ['WON', 'LOST'],
+  WON: ['CLOSED'],
+  LOST: ['CLOSED'],
+  CLOSED: [],
+  // Legacy aliases
+  RECEIVED: ['UNDER_REVIEW', 'EVIDENCE_GATHERING', 'CLOSED'],
+  EVIDENCE_GATHERING: ['RESPONSE_READY', 'RESPONSE_GENERATED', 'CLOSED'],
+  RESPONSE_GENERATED: ['SUBMITTED', 'CLOSED'],
+};
+
 const generatedResponseSchema = new mongoose.Schema(
   {
     narrative: { type: String, trim: true },
@@ -35,13 +64,12 @@ const chargebackSchema = new mongoose.Schema(
       type: String,
       required: [true, 'caseNumber is required'],
       trim: true,
-      index: true,
     },
     network: {
       type: String,
       required: true,
       enum: {
-        values: ['VISA', 'MASTERCARD', 'AMEX', 'OTHER'],
+        values: CHARGEBACK_NETWORKS,
         message: '{VALUE} is not a supported card network',
       },
     },
@@ -61,6 +89,7 @@ const chargebackSchema = new mongoose.Schema(
     },
     deadlineDate: {
       type: Date,
+      alias: 'deadline',
       required: [true, 'deadlineDate is required'],
       index: true,
     },
@@ -68,17 +97,10 @@ const chargebackSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: {
-        values: [
-          'RECEIVED',
-          'EVIDENCE_GATHERING',
-          'RESPONSE_GENERATED',
-          'SUBMITTED',
-          'WON',
-          'LOST',
-        ],
+        values: CHARGEBACK_STATUSES,
         message: '{VALUE} is not a valid chargeback status',
       },
-      default: 'RECEIVED',
+      default: 'OPEN',
       index: true,
     },
     generatedResponse: generatedResponseSchema,
@@ -88,9 +110,15 @@ const chargebackSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Compound indexes
 chargebackSchema.index({ merchantId: 1, status: 1 });
 chargebackSchema.index({ merchantId: 1, deadlineDate: 1 });
-chargebackSchema.index({ caseNumber: 1, merchantId: 1 });
+chargebackSchema.index({ merchantId: 1, caseNumber: 1 }, { unique: true });
 
-module.exports = mongoose.model('Chargeback', chargebackSchema);
+const Chargeback = mongoose.model('Chargeback', chargebackSchema);
+Chargeback.CHARGEBACK_STATUSES = CHARGEBACK_STATUSES;
+Chargeback.CHARGEBACK_NETWORKS = CHARGEBACK_NETWORKS;
+Chargeback.ALLOWED_TRANSITIONS = ALLOWED_TRANSITIONS;
+
+module.exports = Chargeback;
+
