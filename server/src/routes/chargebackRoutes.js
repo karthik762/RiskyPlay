@@ -42,4 +42,8 @@ router.patch(
   chargebackController.updateChargebackStatus
 );
 
+// Mount evidence sub-resource router under /:chargebackId/evidence
+const evidenceRoutes = require('./evidenceRoutes');
+router.use('/:chargebackId/evidence', evidenceRoutes);
+
 module.exports = router;

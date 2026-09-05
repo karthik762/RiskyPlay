@@ -29,6 +29,15 @@ const ALLOWED_TRANSITIONS = {
   RESPONSE_GENERATED: ['SUBMITTED', 'CLOSED'],
 };
 
+const evidenceSummarySchema = new mongoose.Schema(
+  {
+    evidenceCount: { type: Number, default: 0 },
+    coverage: { type: mongoose.Schema.Types.Mixed },
+    lastIndexedAt: { type: Date },
+  },
+  { _id: false }
+);
+
 const generatedResponseSchema = new mongoose.Schema(
   {
     narrative: { type: String, trim: true },
@@ -104,6 +113,7 @@ const chargebackSchema = new mongoose.Schema(
       index: true,
     },
     generatedResponse: generatedResponseSchema,
+    evidenceSummary: evidenceSummarySchema,
   },
   {
     timestamps: true,

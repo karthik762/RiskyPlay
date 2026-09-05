@@ -90,6 +90,7 @@ function formatChargeback(chargeback, options = {}) {
     deadlineStatus: computeDeadlineStatus(deadlineDate, doc.status, options.now),
     status: doc.status,
     generatedResponse: doc.generatedResponse || null,
+    evidenceSummary: doc.evidenceSummary || null,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
   };
