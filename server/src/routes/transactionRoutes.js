@@ -2,6 +2,7 @@ const express = require('express');
 const authenticate = require('../middleware/authenticate');
 const validate = require('../middleware/validate');
 const transactionController = require('../controllers/transactionController');
+const riskController = require('../controllers/riskController');
 const {
   createTransactionSchema,
   listTransactionsSchema,
@@ -40,6 +41,20 @@ router.patch(
   '/:id/status',
   validate(updateTransactionStatusSchema),
   transactionController.updateTransactionStatus
+);
+
+// POST /api/v1/transactions/:id/risk - Run deterministic risk assessment
+router.post(
+  '/:id/risk',
+  validate(transactionIdParamSchema),
+  riskController.assessTransactionRisk
+);
+
+// GET /api/v1/transactions/:id/risk - Retrieve latest risk assessment
+router.get(
+  '/:id/risk',
+  validate(transactionIdParamSchema),
+  riskController.getLatestRiskAssessment
 );
 
 module.exports = router;

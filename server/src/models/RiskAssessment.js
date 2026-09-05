@@ -32,10 +32,13 @@ const signalSchema = new mongoose.Schema(
 
 const ruleMatchSchema = new mongoose.Schema(
   {
-    ruleId: { type: String, required: true, trim: true },
-    ruleName: { type: String, required: true, trim: true },
+    rule: { type: String, trim: true },
+    ruleId: { type: String, trim: true },
+    ruleName: { type: String, trim: true },
+    points: { type: Number, default: 0 },
+    reason: { type: String, trim: true },
     action: { type: String, trim: true },
-    triggered: { type: Boolean, default: false },
+    triggered: { type: Boolean, default: true },
     details: { type: mongoose.Schema.Types.Mixed },
   },
   { _id: false }
@@ -47,6 +50,10 @@ const riskAssessmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Transaction',
       required: [true, 'transactionId reference is required'],
+    },
+    merchantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Merchant',
       index: true,
     },
     riskScore: {
@@ -58,7 +65,6 @@ const riskAssessmentSchema = new mongoose.Schema(
         validator: Number.isInteger,
         message: 'riskScore must be an integer between 0 and 100',
       },
-      index: true,
     },
     riskTier: {
       type: String,
@@ -67,7 +73,6 @@ const riskAssessmentSchema = new mongoose.Schema(
         values: ['LOW', 'MEDIUM', 'HIGH'],
         message: '{VALUE} is not a valid risk tier',
       },
-      index: true,
     },
     signals: [signalSchema],
     baselineScore: {
@@ -79,6 +84,7 @@ const riskAssessmentSchema = new mongoose.Schema(
       type: Number,
       min: [0, 'aiScore cannot be negative'],
       max: [100, 'aiScore cannot exceed 100'],
+      default: null,
     },
     recommendation: {
       type: String,
