@@ -119,7 +119,7 @@ class Orchestrator {
     transactionId,
     transaction,
     deterministicAssessment = null,
-    agentNames = ['TRANSACTION_RISK_BASELINE'],
+    agentNames = ['TRANSACTION_RISK_BASELINE', 'RISK_ANALYST', 'RISK_VERIFICATION'],
     timeoutMs = null,
     metadata = {},
   }) {
@@ -226,12 +226,24 @@ class Orchestrator {
       }
     }
 
-    // Synthesize final result summary
+    const baselineOutput = currentContext.getResult('TRANSACTION_RISK_BASELINE');
+    const verificationOutput = currentContext.getResult('RISK_VERIFICATION');
+
+    const decision = baselineOutput
+      ? {
+          riskScore: baselineOutput.riskScore,
+          riskTier: baselineOutput.riskTier,
+          recommendation: baselineOutput.recommendation,
+          authority: 'DETERMINISTIC_BASELINE',
+        }
+      : null;
+
+    // Synthesize final result summary (backward-compatible)
     const finalResult = {
       runId,
       status: overallStatus,
       executedAgentCount: agentResponses.length,
-      primaryAssessment: currentContext.getResult('TRANSACTION_RISK_BASELINE') || null,
+      primaryAssessment: baselineOutput || null,
     };
 
     return {
@@ -239,7 +251,9 @@ class Orchestrator {
       merchantId,
       transactionId,
       status: overallStatus,
+      decision,
       agents: agentResponses,
+      verification: verificationOutput || null,
       finalResult,
       createdAt: new Date().toISOString(),
     };

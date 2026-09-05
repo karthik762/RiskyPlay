@@ -209,6 +209,17 @@ function formatRiskAssessment(assessment) {
     };
   }
 
+  if (doc.verification) {
+    formatted.verification = {
+      status: doc.verification.status,
+      scoreDelta: doc.verification.scoreDelta,
+      tierAgreement: doc.verification.tierAgreement,
+      recommendationAgreement: doc.verification.recommendationAgreement,
+      warnings: Array.isArray(doc.verification.warnings) ? [...doc.verification.warnings] : [],
+      verifiedAt: doc.verification.verifiedAt,
+    };
+  }
+
   return formatted;
 }
 

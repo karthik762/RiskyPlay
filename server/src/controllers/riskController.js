@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const riskService = require('../services/riskService');
 const { defaultOrchestrator } = require('../agents');
-const { Transaction } = require('../models');
+const { Transaction, RiskAssessment } = require('../models');
 const AppError = require('../utils/AppError');
 
 /**
@@ -76,6 +76,35 @@ async function orchestrateTransactionRisk(req, res, next) {
       transactionId: transaction._id.toString(),
       transaction,
     });
+
+    // 3. Persist verification metadata backward-compatibly on latest RiskAssessment if present and DB connected
+    if (
+      mongoose.connection.readyState === 1 &&
+      orchestrationResult.verification &&
+      RiskAssessment &&
+      typeof RiskAssessment.findOneAndUpdate === 'function'
+    ) {
+      try {
+        await RiskAssessment.findOneAndUpdate(
+          { transactionId: transaction._id, merchantId },
+          {
+            $set: {
+              verification: {
+                status: orchestrationResult.verification.status,
+                scoreDelta: orchestrationResult.verification.comparison?.scoreDelta,
+                tierAgreement: orchestrationResult.verification.comparison?.tierAgreement,
+                recommendationAgreement: orchestrationResult.verification.comparison?.recommendationAgreement,
+                warnings: orchestrationResult.verification.warnings,
+                verifiedAt: orchestrationResult.verification.verifiedAt || new Date(),
+              },
+            },
+          },
+          { sort: { createdAt: -1 } }
+        );
+      } catch {
+        // Safe degradation without impacting orchestration response
+      }
+    }
 
     res.status(200).json({
       success: true,

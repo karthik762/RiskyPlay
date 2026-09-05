@@ -7,6 +7,7 @@ const env = require('../src/config/env');
 const { signAccessToken } = require('../src/utils/jwt');
 const { Transaction, AgentTrace, Merchant } = require('../src/models');
 const { hashPassword } = require('../src/utils/password');
+const aiRiskService = require('../src/services/aiRiskService');
 
 const MONGODB_URI = process.env.MONGODB_URI || env.MONGODB_URI;
 
@@ -124,11 +125,28 @@ describe('MULTI-AGENT ORCHESTRATOR API & TENANT ISOLATION (MOCK SUITE)', () => {
       capturedTraces.push(traceData);
       return traceData;
     };
+
+    // Mock aiRiskService.analyzeTransactionRisk
+    originalAnalyzeRisk = aiRiskService.analyzeTransactionRisk;
+    aiRiskService.analyzeTransactionRisk = async () => ({
+      success: true,
+      status: 'SUCCESS',
+      aiScore: 75,
+      riskTier: 'HIGH',
+      recommendation: 'DECLINE',
+      summary: 'Advisory analysis performed.',
+      riskFactors: [
+        { code: 'HIGH_VALUE', description: 'Transaction amount is elevated', severity: 'HIGH' },
+      ],
+    });
   });
 
   afterEach(() => {
     Transaction.findOne = originalTxFindOne;
     AgentTrace.create = originalTraceCreate;
+    if (originalAnalyzeRisk) {
+      aiRiskService.analyzeTransactionRisk = originalAnalyzeRisk;
+    }
   });
 
   it('POST /:id/risk/orchestrate — rejects unauthenticated requests with 401', async () => {
@@ -192,7 +210,7 @@ describe('MULTI-AGENT ORCHESTRATOR API & TENANT ISOLATION (MOCK SUITE)', () => {
     assert.equal(data.merchantId, MERCHANT_A_ID);
     assert.equal(data.status, 'COMPLETED');
     assert.ok(Array.isArray(data.agents));
-    assert.equal(data.agents.length, 1);
+    assert.equal(data.agents.length, 3);
 
     const baselineAgent = data.agents[0];
     assert.equal(baselineAgent.agentName, 'TRANSACTION_RISK_BASELINE');
@@ -204,20 +222,46 @@ describe('MULTI-AGENT ORCHESTRATOR API & TENANT ISOLATION (MOCK SUITE)', () => {
     assert.ok(Array.isArray(baselineAgent.output.matchedRules));
     assert.ok(Array.isArray(baselineAgent.output.signals));
 
-    // Check finalResult mirrors baseline output
+    const analystAgent = data.agents[1];
+    assert.equal(analystAgent.agentName, 'RISK_ANALYST');
+    assert.equal(analystAgent.status, 'COMPLETED');
+    assert.ok(analystAgent.output);
+
+    const verificationAgent = data.agents[2];
+    assert.equal(verificationAgent.agentName, 'RISK_VERIFICATION');
+    assert.equal(verificationAgent.status, 'COMPLETED');
+    assert.ok(verificationAgent.output);
+
+    // Canonical decision authority MUST be deterministic baseline
+    assert.ok(data.decision);
+    assert.equal(data.decision.authority, 'DETERMINISTIC_BASELINE');
+    assert.equal(data.decision.riskScore, baselineAgent.output.riskScore);
+    assert.equal(data.decision.riskTier, baselineAgent.output.riskTier);
+    assert.equal(data.decision.recommendation, baselineAgent.output.recommendation);
+
+    // Structured verification
+    assert.ok(data.verification);
+    assert.ok(['VERIFIED', 'VERIFIED_WITH_WARNINGS', 'AI_UNAVAILABLE', 'REJECTED'].includes(data.verification.status));
+
+    // Check finalResult mirrors baseline output for backward compatibility
     assert.ok(data.finalResult);
     assert.ok(data.finalResult.primaryAssessment);
     assert.equal(data.finalResult.primaryAssessment.riskScore, baselineAgent.output.riskScore);
 
-    // Check trace was recorded via mock
-    assert.equal(capturedTraces.length, 1);
-    const trace = capturedTraces[0];
-    assert.equal(trace.runId, data.runId);
-    assert.equal(trace.entityType, 'TRANSACTION_RISK');
-    assert.equal(trace.agentName, 'TRANSACTION_RISK_BASELINE');
-    assert.equal(trace.status, 'COMPLETED');
-    assert.equal(trace.stepIndex, 0);
-    assert.ok(trace.latencyMs >= 0);
+    // Check traces were recorded via mock (3 agents)
+    assert.equal(capturedTraces.length, 3);
+    assert.equal(capturedTraces[0].agentName, 'TRANSACTION_RISK_BASELINE');
+    assert.equal(capturedTraces[0].stepIndex, 0);
+    assert.equal(capturedTraces[1].agentName, 'RISK_ANALYST');
+    assert.equal(capturedTraces[1].stepIndex, 1);
+    assert.equal(capturedTraces[2].agentName, 'RISK_VERIFICATION');
+    assert.equal(capturedTraces[2].stepIndex, 2);
+    capturedTraces.forEach((tr) => {
+      assert.equal(tr.runId, data.runId);
+      assert.equal(tr.entityType, 'TRANSACTION_RISK');
+      assert.equal(tr.status, 'COMPLETED');
+      assert.ok(tr.latencyMs >= 0);
+    });
   });
 });
 
@@ -280,6 +324,18 @@ describe('MULTI-AGENT ORCHESTRATOR API — LIVE MONGODB INTEGRATION', () => {
         resolve();
       });
     });
+
+    aiRiskService.analyzeTransactionRisk = async () => ({
+      success: true,
+      status: 'SUCCESS',
+      aiScore: 75,
+      riskTier: 'HIGH',
+      recommendation: 'DECLINE',
+      summary: 'Advisory analysis performed.',
+      riskFactors: [
+        { code: 'HIGH_VALUE', description: 'Transaction amount is elevated', severity: 'HIGH' },
+      ],
+    });
   });
 
   after(async () => {
@@ -311,12 +367,18 @@ describe('MULTI-AGENT ORCHESTRATOR API — LIVE MONGODB INTEGRATION', () => {
     const data = res.body.data;
     assert.ok(data.runId);
     assert.equal(data.status, 'COMPLETED');
-    assert.equal(data.agents.length, 1);
+    assert.equal(data.agents.length, 3);
     assert.equal(data.agents[0].agentName, 'TRANSACTION_RISK_BASELINE');
+    assert.equal(data.agents[1].agentName, 'RISK_ANALYST');
+    assert.equal(data.agents[2].agentName, 'RISK_VERIFICATION');
+
+    assert.ok(data.decision);
+    assert.equal(data.decision.authority, 'DETERMINISTIC_BASELINE');
+    assert.ok(data.verification);
 
     // Query persisted AgentTrace from MongoDB
-    const traces = await AgentTrace.find({ runId: data.runId }).lean();
-    assert.equal(traces.length, 1);
+    const traces = await AgentTrace.find({ runId: data.runId }).sort({ stepIndex: 1 }).lean();
+    assert.equal(traces.length, 3);
 
     const trace = traces[0];
     assert.equal(trace.runId, data.runId);
@@ -326,6 +388,20 @@ describe('MULTI-AGENT ORCHESTRATOR API — LIVE MONGODB INTEGRATION', () => {
     assert.equal(trace.stepIndex, 0);
     assert.equal(trace.status, 'COMPLETED');
     assert.ok(trace.latencyMs >= 0);
+
+    const analystTrace = traces[1];
+    assert.equal(analystTrace.runId, data.runId);
+    assert.equal(analystTrace.entityType, 'TRANSACTION_RISK');
+    assert.equal(analystTrace.agentName, 'RISK_ANALYST');
+    assert.equal(analystTrace.stepIndex, 1);
+    assert.equal(analystTrace.status, 'COMPLETED');
+
+    const verificationTrace = traces[2];
+    assert.equal(verificationTrace.runId, data.runId);
+    assert.equal(verificationTrace.entityType, 'TRANSACTION_RISK');
+    assert.equal(verificationTrace.agentName, 'RISK_VERIFICATION');
+    assert.equal(verificationTrace.stepIndex, 2);
+    assert.equal(verificationTrace.status, 'COMPLETED');
 
     // Verify operational reasoning (NOT raw chain of thought)
     assert.ok(trace.reasoning);

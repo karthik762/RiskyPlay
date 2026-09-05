@@ -75,6 +75,22 @@ const aiAnalysisSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const verificationSchema = new mongoose.Schema(
+  {
+    status: {
+      type: String,
+      enum: ['VERIFIED', 'VERIFIED_WITH_WARNINGS', 'REJECTED', 'AI_UNAVAILABLE'],
+      required: true,
+    },
+    scoreDelta: { type: Number, default: null },
+    tierAgreement: { type: Boolean, default: null },
+    recommendationAgreement: { type: Boolean, default: null },
+    warnings: [{ type: String, trim: true }],
+    verifiedAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
 const riskAssessmentSchema = new mongoose.Schema(
   {
     transactionId: {
@@ -118,6 +134,7 @@ const riskAssessmentSchema = new mongoose.Schema(
       default: null,
     },
     aiAnalysis: aiAnalysisSchema,
+    verification: verificationSchema,
     recommendation: {
       type: String,
       required: true,

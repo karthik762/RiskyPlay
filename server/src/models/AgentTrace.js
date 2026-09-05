@@ -30,6 +30,7 @@ const agentTraceSchema = new mongoose.Schema(
           'ORCHESTRATOR',
           'RISK_ANALYST',
           'TRANSACTION_RISK_BASELINE',
+          'RISK_VERIFICATION',
           'EVIDENCE',
           'CHARGEBACK_RESPONSE',
           'VERIFICATION_QA',
