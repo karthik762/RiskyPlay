@@ -3,6 +3,7 @@ const riskConfig = require('../config/riskConfig');
 /**
  * Evaluates Rule 1: High Transaction Value.
  * Triggers when transaction amount meets or exceeds the high-value baseline threshold.
+ * Hardened against non-finite values (NaN, Infinity, -Infinity).
  *
  * @param {Object} transaction - Transaction data
  * @param {Object} [config] - Injected risk configuration
@@ -10,7 +11,7 @@ const riskConfig = require('../config/riskConfig');
  */
 function evaluateHighValue(transaction, config = riskConfig) {
   const amount = Number(transaction.amount);
-  if (!Number.isNaN(amount) && amount >= config.THRESHOLDS.HIGH_VALUE_THRESHOLD) {
+  if (Number.isFinite(amount) && amount >= config.THRESHOLDS.HIGH_VALUE_THRESHOLD) {
     return {
       signal: {
         code: config.RULE_CODES.HIGH_VALUE_TRANSACTION,
@@ -35,6 +36,7 @@ function evaluateHighValue(transaction, config = riskConfig) {
 /**
  * Evaluates Rule 2: Elevated / Medium Transaction Value.
  * Triggers when transaction amount is at or above the medium threshold but below the high threshold.
+ * Hardened against non-finite values (NaN, Infinity, -Infinity).
  *
  * @param {Object} transaction - Transaction data
  * @param {Object} [config] - Injected risk configuration
@@ -43,7 +45,7 @@ function evaluateHighValue(transaction, config = riskConfig) {
 function evaluateMediumValue(transaction, config = riskConfig) {
   const amount = Number(transaction.amount);
   if (
-    !Number.isNaN(amount) &&
+    Number.isFinite(amount) &&
     amount >= config.THRESHOLDS.MEDIUM_VALUE_THRESHOLD &&
     amount < config.THRESHOLDS.HIGH_VALUE_THRESHOLD
   ) {
@@ -129,6 +131,7 @@ const RULE_4_INTERNATIONAL_ISSUER_STATUS = Object.freeze({
  * Evaluates Rule 5: Cart Total Mismatch.
  * Triggers if transaction has cart items and their calculated total differs from
  * transaction.amount beyond the allowable rounding tolerance.
+ * Hardened against floating-point precision artifacts and non-finite numbers.
  *
  * @param {Object} transaction - Transaction data
  * @param {Object} [config] - Injected risk configuration
@@ -136,17 +139,28 @@ const RULE_4_INTERNATIONAL_ISSUER_STATUS = Object.freeze({
  */
 function evaluateCartMismatch(transaction, config = riskConfig) {
   const cartItems = transaction.cartItems;
+  const transactionAmount = Number(transaction.amount);
+
+  if (!Number.isFinite(transactionAmount) || transactionAmount < 0) {
+    return null;
+  }
+
   if (Array.isArray(cartItems) && cartItems.length > 0) {
-    const calculatedTotal = cartItems.reduce((sum, item) => {
-      const price = Number(item.price) || 0;
-      const quantity = Number(item.quantity) || 0;
-      return sum + price * quantity;
-    }, 0);
+    let calculatedTotal = 0;
+    for (const item of cartItems) {
+      const price = Number(item.price);
+      const quantity = Number(item.quantity);
+      if (!Number.isFinite(price) || !Number.isFinite(quantity) || price < 0 || quantity < 0) {
+        return null;
+      }
+      calculatedTotal += price * quantity;
+    }
 
-    const transactionAmount = Number(transaction.amount) || 0;
     const difference = Math.abs(calculatedTotal - transactionAmount);
+    // Round difference to 4 decimal places to prevent float epsilon false positives (e.g. 0.010000000000000009)
+    const roundedDifference = Math.round(difference * 10000) / 10000;
 
-    if (difference > config.THRESHOLDS.CART_MISMATCH_TOLERANCE) {
+    if (roundedDifference > config.THRESHOLDS.CART_MISMATCH_TOLERANCE) {
       return {
         signal: {
           code: config.RULE_CODES.CART_TOTAL_MISMATCH,
@@ -172,6 +186,7 @@ function evaluateCartMismatch(transaction, config = riskConfig) {
 /**
  * Evaluates Rule 6: Large Item Quantity.
  * Triggers if any cart item has a quantity at or above the configured large-quantity threshold.
+ * Hardened against non-finite values.
  *
  * @param {Object} transaction - Transaction data
  * @param {Object} [config] - Injected risk configuration
@@ -180,9 +195,10 @@ function evaluateCartMismatch(transaction, config = riskConfig) {
 function evaluateLargeQuantity(transaction, config = riskConfig) {
   const cartItems = transaction.cartItems;
   if (Array.isArray(cartItems) && cartItems.length > 0) {
-    const largeItem = cartItems.find(
-      (item) => Number(item.quantity) >= config.THRESHOLDS.LARGE_ITEM_QUANTITY_THRESHOLD
-    );
+    const largeItem = cartItems.find((item) => {
+      const qty = Number(item.quantity);
+      return Number.isFinite(qty) && qty >= config.THRESHOLDS.LARGE_ITEM_QUANTITY_THRESHOLD;
+    });
 
     if (largeItem) {
       const itemTitle = largeItem.title || 'Item';

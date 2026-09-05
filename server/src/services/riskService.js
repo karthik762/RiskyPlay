@@ -11,14 +11,93 @@ const { Transaction, RiskAssessment } = require('../models');
 const AppError = require('../utils/AppError');
 
 /**
+ * Validates internal consistency across risk assessment attributes before persistence.
+ * Prevents corrupted or contradictory risk states from entering the database.
+ *
+ * @param {number} riskScore - Calculated risk score
+ * @param {string} riskTier - Assigned risk tier ('LOW' | 'MEDIUM' | 'HIGH')
+ * @param {string} recommendation - Assigned action ('APPROVE' | 'REVIEW' | 'DECLINE')
+ * @param {number} baselineScore - Recorded baseline score
+ * @param {number|null} aiScore - Recorded AI score (must be null for Phase 2 baseline)
+ * @throws {AppError} If any invariant is violated
+ */
+function enforceRiskInvariants(riskScore, riskTier, recommendation, baselineScore, aiScore) {
+  // Invariant 1: riskScore must be an integer between 0 and 100
+  if (!Number.isInteger(riskScore) || riskScore < 0 || riskScore > 100) {
+    throw new AppError(
+      `Internal Invariant Violation: riskScore must be an integer between 0 and 100, received ${riskScore}`,
+      500,
+      'INTERNAL_INVARIANT_ERROR'
+    );
+  }
+
+  // Invariant 2: riskTier must correspond strictly to riskScore tier thresholds
+  let expectedTier;
+  if (riskScore >= riskConfig.TIERS.HIGH.min) {
+    expectedTier = 'HIGH';
+  } else if (riskScore >= riskConfig.TIERS.MEDIUM.min) {
+    expectedTier = 'MEDIUM';
+  } else {
+    expectedTier = 'LOW';
+  }
+
+  if (riskTier !== expectedTier) {
+    throw new AppError(
+      `Internal Invariant Violation: riskTier '${riskTier}' does not match score ${riskScore} (expected '${expectedTier}')`,
+      500,
+      'INTERNAL_INVARIANT_ERROR'
+    );
+  }
+
+  // Invariant 3: recommendation must correspond strictly to riskTier
+  const expectedRec = riskConfig.TIER_RECOMMENDATIONS[expectedTier];
+  if (recommendation !== expectedRec) {
+    throw new AppError(
+      `Internal Invariant Violation: recommendation '${recommendation}' does not match tier '${riskTier}' (expected '${expectedRec}')`,
+      500,
+      'INTERNAL_INVARIANT_ERROR'
+    );
+  }
+
+  // Invariant 4: baselineScore must strictly equal the deterministic riskScore
+  if (baselineScore !== riskScore) {
+    throw new AppError(
+      `Internal Invariant Violation: baselineScore (${baselineScore}) must equal riskScore (${riskScore})`,
+      500,
+      'INTERNAL_INVARIANT_ERROR'
+    );
+  }
+
+  // Invariant 5: aiScore must remain null because no AI scoring exists in Phase 2
+  if (aiScore !== null && aiScore !== undefined) {
+    throw new AppError(
+      `Internal Invariant Violation: aiScore must remain null in deterministic baseline, received ${aiScore}`,
+      500,
+      'INTERNAL_INVARIANT_ERROR'
+    );
+  }
+}
+
+/**
  * Pure calculation function that evaluates deterministic risk rules against a transaction.
  * Operates entirely in-memory with zero network or database dependencies.
+ * Guaranteed to never mutate the input transaction object.
  *
  * @param {Object} transaction - Transaction data object
  * @param {Object} [config] - Injected risk configuration
  * @returns {Object} { riskScore, riskTier, recommendation, signals, ruleMatches }
  */
 function calculateRisk(transaction, config = riskConfig) {
+  if (!transaction || typeof transaction !== 'object') {
+    return {
+      riskScore: 0,
+      riskTier: 'LOW',
+      recommendation: config.TIER_RECOMMENDATIONS.LOW,
+      signals: [],
+      ruleMatches: [],
+    };
+  }
+
   const ruleEvaluators = [
     evaluateHighValue,
     evaluateMediumValue,
@@ -40,7 +119,7 @@ function calculateRisk(transaction, config = riskConfig) {
     }
   }
 
-  // Clamping score between 0 and 100 as integer
+  // Clamping score strictly between 0 and 100 as integer
   const riskScore = Math.min(100, Math.max(0, Math.round(rawScore)));
 
   // Determine risk tier
@@ -66,8 +145,55 @@ function calculateRisk(transaction, config = riskConfig) {
 }
 
 /**
+ * Formats and sanitizes a RiskAssessment document into the stable API response contract.
+ * Excludes internal MongoDB implementation details (__v), secrets, and transaction PII.
+ *
+ * @param {Object} assessment - RiskAssessment document or plain object
+ * @returns {Object} Clean RiskAssessment response
+ */
+function formatRiskAssessment(assessment) {
+  if (!assessment) return null;
+  const doc = typeof assessment.toObject === 'function' ? assessment.toObject() : assessment;
+
+  const id = (doc._id || doc.id)?.toString();
+
+  return {
+    id,
+    _id: doc._id, // Retained for backward-compatibility with tests checking _id
+    transactionId: doc.transactionId,
+    merchantId: doc.merchantId,
+    riskScore: doc.riskScore,
+    riskTier: doc.riskTier,
+    recommendation: doc.recommendation,
+    baselineScore: doc.baselineScore,
+    aiScore: doc.aiScore ?? null,
+    signals: Array.isArray(doc.signals)
+      ? doc.signals.map((s) => ({
+          code: s.code,
+          description: s.description,
+          severity: s.severity,
+          confidence: s.confidence,
+        }))
+      : [],
+    ruleMatches: Array.isArray(doc.ruleMatches)
+      ? doc.ruleMatches.map((r) => ({
+          rule: r.rule || r.ruleId,
+          ruleId: r.ruleId || r.rule,
+          ruleName: r.ruleName,
+          points: r.points,
+          reason: r.reason,
+          action: r.action,
+          triggered: r.triggered ?? true,
+        }))
+      : [],
+    createdAt: doc.createdAt,
+  };
+}
+
+/**
  * Assesses transaction risk for an authenticated merchant and persists the RiskAssessment document.
  * Enforces tenant ownership by querying for the transaction with both _id and merchantId.
+ * Validates invariants prior to persistence.
  *
  * @param {string} merchantId - Authenticated merchant ObjectId
  * @param {string} transactionId - Transaction ObjectId to assess
@@ -92,7 +218,16 @@ async function assessAndPersistRisk(merchantId, transactionId, config = riskConf
   // 2. Execute deterministic risk calculation
   const result = calculateRisk(transaction, config);
 
-  // 3. Persist RiskAssessment document
+  // 3. Enforce service-level data consistency invariants
+  enforceRiskInvariants(
+    result.riskScore,
+    result.riskTier,
+    result.recommendation,
+    result.riskScore, // baselineScore
+    null              // aiScore
+  );
+
+  // 4. Persist RiskAssessment document
   const assessment = await RiskAssessment.create({
     transactionId: transaction._id,
     merchantId: transaction.merchantId,
@@ -148,6 +283,8 @@ async function getLatestAssessment(merchantId, transactionId) {
 
 module.exports = {
   calculateRisk,
+  enforceRiskInvariants,
+  formatRiskAssessment,
   assessAndPersistRisk,
   getLatestAssessment,
 };

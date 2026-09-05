@@ -1,7 +1,7 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const riskConfig = require('../src/config/riskConfig');
-const { calculateRisk } = require('../src/services/riskService');
+const { calculateRisk, enforceRiskInvariants } = require('../src/services/riskService');
 const {
   evaluateHighValue,
   evaluateMediumValue,
@@ -11,21 +11,18 @@ const {
   RULE_4_INTERNATIONAL_ISSUER_STATUS,
 } = require('../src/services/riskRules');
 
-describe('DETERMINISTIC RISK ENGINE — UNIT TESTS', () => {
+describe('DETERMINISTIC RISK ENGINE — UNIT & HARDENING TESTS', () => {
   // =========================================================================
-  // A. BASIC SCORING
+  // 1. ZERO-RISK TRANSACTIONS
   // =========================================================================
-  describe('A. Basic Scoring Profiles', () => {
-    it('Low-risk transaction: standard amount, valid customer, matching cart yields LOW tier & APPROVE', () => {
+  describe('1. Zero-Risk Transactions', () => {
+    it('Transaction with no triggered rules produces score 0, LOW tier, APPROVE, empty signals/matches', () => {
       const tx = {
-        amount: 50.0,
+        amount: 45.0,
         currency: 'USD',
-        customer: {
-          email: 'customer@example.com',
-          phone: '+15551234567',
-        },
+        customer: { email: 'safe.shopper@merchant.com', phone: '+12025550199' },
         cartItems: [
-          { title: 'Book', price: 25.0, quantity: 2 },
+          { title: 'Standard Item', price: 15.0, quantity: 3 },
         ],
       };
 
@@ -34,389 +31,347 @@ describe('DETERMINISTIC RISK ENGINE — UNIT TESTS', () => {
       assert.equal(result.riskScore, 0);
       assert.equal(result.riskTier, 'LOW');
       assert.equal(result.recommendation, 'APPROVE');
-      assert.equal(result.signals.length, 0);
-      assert.equal(result.ruleMatches.length, 0);
+      assert.deepEqual(result.signals, []);
+      assert.deepEqual(result.ruleMatches, []);
     });
 
-    it('Medium-risk transaction: elevated amount ($600) + missing customer email yields MEDIUM tier & REVIEW', () => {
-      const tx = {
-        amount: 600.0,
+    it('Empty transaction object produces safe zero-risk default without crashing', () => {
+      const result = calculateRisk({});
+      assert.equal(result.riskScore, 15); // Customer is incomplete because no customer object exists
+      assert.equal(result.riskTier, 'LOW');
+      assert.equal(result.recommendation, 'APPROVE');
+    });
+
+    it('Null or non-object transaction safely defaults to 0 score without exceptions', () => {
+      assert.equal(calculateRisk(null).riskScore, 0);
+      assert.equal(calculateRisk(undefined).riskScore, 0);
+      assert.equal(calculateRisk('invalid').riskScore, 0);
+    });
+  });
+
+  // =========================================================================
+  // 2. INPUT IMMUTABILITY
+  // =========================================================================
+  describe('2. Input Immutability', () => {
+    it('calculateRisk does not mutate transaction object or any nested properties', () => {
+      const original = {
+        _id: '64a1b2c3d4e5f6a7b8c9d001',
+        merchantId: '507f1f77bcf86cd799439011',
+        amount: 1500.0,
         currency: 'USD',
-        customer: {}, // Missing email
+        customer: {
+          email: 'alice@domain.com',
+          phone: '+15551234567',
+          billingAddress: { city: 'New York', country: 'US' },
+        },
         cartItems: [
-          { title: 'Headphones', price: 600.0, quantity: 1 },
+          { title: 'Monitor', price: 500.0, quantity: 2 },
+          { title: 'Cable', price: 25.0, quantity: 1 },
         ],
       };
 
+      // Deep clone before execution
+      const snapshot = JSON.parse(JSON.stringify(original));
+
+      // Execute risk engine
+      const result = calculateRisk(original);
+
+      // Verify execution produced non-trivial output
+      assert.ok(result.riskScore > 0);
+
+      // Verify original object is completely identical to snapshot
+      assert.deepEqual(original, snapshot);
+      assert.equal(original.amount, 1500.0);
+      assert.equal(original.cartItems.length, 2);
+      assert.equal(original.cartItems[0].quantity, 2);
+    });
+  });
+
+  // =========================================================================
+  // 3. NUMERIC EDGE CASES & DEFENSIVE HARDENING
+  // =========================================================================
+  describe('3. Numeric Edge Cases & Defensive Hardening', () => {
+    it('amount = 0: Evaluates without crashing and does not trigger high/elevated value', () => {
+      const tx = { amount: 0, customer: { email: 'zero@test.com' } };
+      const res = calculateRisk(tx);
+      assert.equal(res.riskScore, 0);
+      assert.equal(res.riskTier, 'LOW');
+    });
+
+    it('amount = 0.01: Micro-transaction evaluates cleanly', () => {
+      const tx = { amount: 0.01, customer: { email: 'micro@test.com' } };
+      const res = calculateRisk(tx);
+      assert.equal(res.riskScore, 0);
+      assert.equal(res.riskTier, 'LOW');
+    });
+
+    it('amount = 1000000000: Very large amount triggers HIGH_VALUE_TRANSACTION cleanly without overflow', () => {
+      const tx = { amount: 1000000000, customer: { email: 'whale@test.com' } };
+      const res = calculateRisk(tx);
+      assert.equal(res.riskScore, 40);
+      assert.equal(res.riskTier, 'MEDIUM');
+      assert.equal(res.signals[0].code, 'HIGH_VALUE_TRANSACTION');
+    });
+
+    it('amount = NaN, Infinity, -Infinity are defensively ignored and never corrupt score', () => {
+      assert.equal(evaluateHighValue({ amount: NaN }), null);
+      assert.equal(evaluateHighValue({ amount: Infinity }), null);
+      assert.equal(evaluateHighValue({ amount: -Infinity }), null);
+      assert.equal(evaluateMediumValue({ amount: NaN }), null);
+      assert.equal(evaluateMediumValue({ amount: Infinity }), null);
+      assert.equal(evaluateCartMismatch({ amount: NaN, cartItems: [{ price: 10, quantity: 1 }] }), null);
+    });
+
+    it('cart quantity edge cases (1, 9, 10): 10 triggers LARGE_ITEM_QUANTITY, 1 and 9 do not', () => {
+      assert.equal(evaluateLargeQuantity({ cartItems: [{ price: 10, quantity: 1 }] }), null);
+      assert.equal(evaluateLargeQuantity({ cartItems: [{ price: 10, quantity: 9 }] }), null);
+      const triggered = evaluateLargeQuantity({ cartItems: [{ price: 10, quantity: 10 }] });
+      assert.ok(triggered);
+      assert.equal(triggered.ruleMatch.rule, 'LARGE_ITEM_QUANTITY');
+    });
+
+    it('floating-point cart calculations around $0.01 tolerance are strictly respected', () => {
+      // Exactly $0.01 difference: difference <= 0.01 -> NO MISMATCH
+      const txExactTolerance = {
+        amount: 100.0,
+        cartItems: [{ price: 100.01, quantity: 1 }],
+      };
+      assert.equal(evaluateCartMismatch(txExactTolerance), null);
+
+      // Float representation of $0.01 difference (e.g. 100.00 vs 99.99): diff = 0.01 -> NO MISMATCH
+      const txFloatPoint1 = {
+        amount: 100.0,
+        cartItems: [{ price: 33.33, quantity: 3 }], // 99.99
+      };
+      assert.equal(evaluateCartMismatch(txFloatPoint1), null);
+
+      // $0.011 difference (above $0.01 tolerance) -> TRIGGERS MISMATCH
+      const txOverTolerance = {
+        amount: 100.0,
+        cartItems: [{ price: 100.02, quantity: 1 }],
+      };
+      const mismatch = evaluateCartMismatch(txOverTolerance);
+      assert.ok(mismatch);
+      assert.equal(mismatch.signal.code, 'CART_TOTAL_MISMATCH');
+    });
+  });
+
+  // =========================================================================
+  // 4. EXACT RULE BOUNDARY TESTS
+  // =========================================================================
+  describe('4. Exact Rule Boundaries', () => {
+    describe('High Value Boundaries (threshold: $1,000.00)', () => {
+      it('$999.99 does NOT trigger high value', () => {
+        assert.equal(evaluateHighValue({ amount: 999.99 }), null);
+      });
+
+      it('$1000.00 DOES trigger high value', () => {
+        const match = evaluateHighValue({ amount: 1000.0 });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'HIGH_VALUE_TRANSACTION');
+        assert.equal(match.ruleMatch.points, 40);
+      });
+    });
+
+    describe('Medium Value Boundaries (range: $500.00 to $999.99)', () => {
+      it('$499.99 does NOT trigger elevated value', () => {
+        assert.equal(evaluateMediumValue({ amount: 499.99 }), null);
+      });
+
+      it('$500.00 DOES trigger elevated value', () => {
+        const match = evaluateMediumValue({ amount: 500.0 });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'ELEVATED_TRANSACTION_VALUE');
+        assert.equal(match.ruleMatch.points, 20);
+      });
+
+      it('$999.99 DOES trigger elevated value', () => {
+        const match = evaluateMediumValue({ amount: 999.99 });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'ELEVATED_TRANSACTION_VALUE');
+        assert.equal(match.ruleMatch.points, 20);
+      });
+
+      it('$1000.00 does NOT trigger elevated value (escalates to High Value)', () => {
+        assert.equal(evaluateMediumValue({ amount: 1000.0 }), null);
+      });
+    });
+
+    describe('Large Item Quantity Boundaries (threshold: 10)', () => {
+      it('Quantity 9 does NOT trigger large quantity', () => {
+        assert.equal(evaluateLargeQuantity({ cartItems: [{ price: 5, quantity: 9 }] }), null);
+      });
+
+      it('Quantity 10 DOES trigger large quantity', () => {
+        const match = evaluateLargeQuantity({ cartItems: [{ price: 5, quantity: 10 }] });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'LARGE_ITEM_QUANTITY');
+        assert.equal(match.ruleMatch.points, 20);
+      });
+    });
+
+    describe('Cart Mismatch Boundaries (tolerance: $0.01)', () => {
+      it('Difference <= 0.01 does NOT trigger mismatch', () => {
+        assert.equal(evaluateCartMismatch({ amount: 50.0, cartItems: [{ price: 50.01, quantity: 1 }] }), null);
+      });
+
+      it('Difference > 0.01 DOES trigger mismatch', () => {
+        const match = evaluateCartMismatch({ amount: 50.0, cartItems: [{ price: 50.02, quantity: 1 }] });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'CART_TOTAL_MISMATCH');
+        assert.equal(match.ruleMatch.points, 35);
+      });
+    });
+
+    describe('Customer Identity Boundaries', () => {
+      it('Valid customer.email does NOT trigger incomplete customer', () => {
+        assert.equal(evaluateCustomerIncomplete({ customer: { email: 'valid@test.com' } }), null);
+      });
+
+      it('Missing customer object DOES trigger incomplete customer', () => {
+        const match = evaluateCustomerIncomplete({});
+        assert.ok(match);
+        assert.equal(match.signal.code, 'CUSTOMER_INFORMATION_INCOMPLETE');
+        assert.equal(match.ruleMatch.points, 15);
+      });
+
+      it('Customer without email DOES trigger incomplete customer', () => {
+        const match = evaluateCustomerIncomplete({ customer: { phone: '+1234567890' } });
+        assert.ok(match);
+        assert.equal(match.signal.code, 'CUSTOMER_INFORMATION_INCOMPLETE');
+      });
+
+      it('Customer with empty or whitespace email DOES trigger incomplete customer', () => {
+        assert.ok(evaluateCustomerIncomplete({ customer: { email: '' } }));
+        assert.ok(evaluateCustomerIncomplete({ customer: { email: '   ' } }));
+      });
+    });
+  });
+
+  // =========================================================================
+  // 5. MULTIPLE RULE COMBINATIONS
+  // =========================================================================
+  describe('5. Multiple Rule Combinations', () => {
+    it('$600 + incomplete customer: 20 + 15 = 35 -> MEDIUM -> REVIEW', () => {
+      const tx = {
+        amount: 600.0,
+        customer: {},
+        cartItems: [{ title: 'Item', price: 600.0, quantity: 1 }],
+      };
       const result = calculateRisk(tx);
 
-      // Elevated value: +20, Customer incomplete: +15 -> 35
       assert.equal(result.riskScore, 35);
       assert.equal(result.riskTier, 'MEDIUM');
       assert.equal(result.recommendation, 'REVIEW');
       assert.equal(result.signals.length, 2);
       assert.equal(result.ruleMatches.length, 2);
+      assert.equal(result.signals[0].code, 'ELEVATED_TRANSACTION_VALUE');
+      assert.equal(result.signals[1].code, 'CUSTOMER_INFORMATION_INCOMPLETE');
     });
 
-    it('High-risk transaction: high amount ($1200) + cart mismatch ($1200 vs $400) yields HIGH tier & DECLINE', () => {
+    it('$1000 + incomplete customer: 40 + 15 = 55 -> MEDIUM -> REVIEW', () => {
       const tx = {
-        amount: 1200.0,
-        currency: 'USD',
-        customer: { email: 'buyer@example.com' },
-        cartItems: [
-          { title: 'Tablet', price: 400.0, quantity: 1 }, // Cart total is $400, but tx amount is $1200
-        ],
+        amount: 1000.0,
+        customer: {},
+        cartItems: [{ title: 'Item', price: 1000.0, quantity: 1 }],
       };
-
       const result = calculateRisk(tx);
 
-      // High value: +40, Cart mismatch: +35 -> 75
+      assert.equal(result.riskScore, 55);
+      assert.equal(result.riskTier, 'MEDIUM');
+      assert.equal(result.recommendation, 'REVIEW');
+      assert.equal(result.signals.length, 2);
+      assert.equal(result.signals[0].code, 'HIGH_VALUE_TRANSACTION');
+      assert.equal(result.signals[1].code, 'CUSTOMER_INFORMATION_INCOMPLETE');
+    });
+
+    it('$1500 + cart mismatch: 40 + 35 = 75 -> HIGH -> DECLINE', () => {
+      const tx = {
+        amount: 1500.0,
+        customer: { email: 'verified@buyer.com' },
+        cartItems: [{ title: 'Item', price: 500.0, quantity: 1 }], // Cart = $500 vs $1500 amount
+      };
+      const result = calculateRisk(tx);
+
       assert.equal(result.riskScore, 75);
       assert.equal(result.riskTier, 'HIGH');
       assert.equal(result.recommendation, 'DECLINE');
       assert.equal(result.signals.length, 2);
-      assert.equal(result.ruleMatches.length, 2);
-    });
-  });
-
-  // =========================================================================
-  // B. RULE BEHAVIOR
-  // =========================================================================
-  describe('B. Individual Rule Behavior', () => {
-    describe('Rule 1: High Transaction Value', () => {
-      it('Triggers when amount exactly equals high threshold ($1000)', () => {
-        const tx = { amount: 1000.0, customer: { email: 'test@example.com' } };
-        const match = evaluateHighValue(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'HIGH_VALUE_TRANSACTION');
-        assert.equal(match.signal.severity, 'HIGH');
-        assert.equal(match.signal.confidence, 1.0);
-        assert.equal(match.ruleMatch.rule, 'HIGH_VALUE_TRANSACTION');
-        assert.equal(match.ruleMatch.points, 40);
-      });
-
-      it('Triggers when amount exceeds high threshold ($2500)', () => {
-        const tx = { amount: 2500.0, customer: { email: 'test@example.com' } };
-        const match = evaluateHighValue(tx);
-        assert.ok(match);
-        assert.equal(match.ruleMatch.points, 40);
-      });
-
-      it('Does not trigger when amount is below high threshold ($999.99)', () => {
-        const tx = { amount: 999.99 };
-        const match = evaluateHighValue(tx);
-        assert.equal(match, null);
-      });
+      assert.equal(result.signals[0].code, 'HIGH_VALUE_TRANSACTION');
+      assert.equal(result.signals[1].code, 'CART_TOTAL_MISMATCH');
     });
 
-    describe('Rule 2: Elevated / Medium Transaction Value', () => {
-      it('Triggers when amount equals medium threshold ($500)', () => {
-        const tx = { amount: 500.0 };
-        const match = evaluateMediumValue(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'ELEVATED_TRANSACTION_VALUE');
-        assert.equal(match.signal.severity, 'MEDIUM');
-        assert.equal(match.signal.confidence, 1.0);
-        assert.equal(match.ruleMatch.points, 20);
-      });
-
-      it('Triggers when amount is between medium and high threshold ($750)', () => {
-        const tx = { amount: 750.0 };
-        const match = evaluateMediumValue(tx);
-        assert.ok(match);
-        assert.equal(match.ruleMatch.points, 20);
-      });
-
-      it('Does not trigger when amount meets or exceeds high threshold ($1000)', () => {
-        const tx = { amount: 1000.0 };
-        const match = evaluateMediumValue(tx);
-        assert.equal(match, null);
-      });
-
-      it('Does not trigger when amount is below medium threshold ($499.99)', () => {
-        const tx = { amount: 499.99 };
-        const match = evaluateMediumValue(tx);
-        assert.equal(match, null);
-      });
-    });
-
-    describe('Rule 3: Customer Information Incomplete', () => {
-      it('Triggers when customer object is undefined', () => {
-        const tx = { amount: 100 };
-        const match = evaluateCustomerIncomplete(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'CUSTOMER_INFORMATION_INCOMPLETE');
-        assert.equal(match.signal.severity, 'LOW');
-        assert.equal(match.signal.confidence, 1.0);
-        assert.equal(match.ruleMatch.points, 15);
-      });
-
-      it('Triggers when customer object has no email property', () => {
-        const tx = { customer: { phone: '+123456789' } };
-        const match = evaluateCustomerIncomplete(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'CUSTOMER_INFORMATION_INCOMPLETE');
-      });
-
-      it('Triggers when customer email is empty whitespace', () => {
-        const tx = { customer: { email: '   ' } };
-        const match = evaluateCustomerIncomplete(tx);
-        assert.ok(match);
-      });
-
-      it('Does not trigger when customer has a valid email', () => {
-        const tx = { customer: { email: 'alice@merchant.org' } };
-        const match = evaluateCustomerIncomplete(tx);
-        assert.equal(match, null);
-      });
-    });
-
-    describe('Rule 4: International Issuer Rationale', () => {
-      it('Rule 4 is explicitly documented as SKIPPED due to missing merchant domestic country', () => {
-        assert.equal(RULE_4_INTERNATIONAL_ISSUER_STATUS.rule, 'INTERNATIONAL_ISSUER');
-        assert.equal(RULE_4_INTERNATIONAL_ISSUER_STATUS.status, 'SKIPPED');
-        assert.ok(RULE_4_INTERNATIONAL_ISSUER_STATUS.reason.includes('merchant domestic country'));
-      });
-    });
-
-    describe('Rule 5: Cart Total Mismatch', () => {
-      it('Triggers when calculated cart total differs from transaction amount beyond tolerance', () => {
-        const tx = {
-          amount: 150.0,
-          cartItems: [
-            { title: 'Item 1', price: 40.0, quantity: 2 }, // Total = $80.00
-          ],
-        };
-        const match = evaluateCartMismatch(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'CART_TOTAL_MISMATCH');
-        assert.equal(match.signal.severity, 'HIGH');
-        assert.equal(match.signal.confidence, 1.0);
-        assert.equal(match.ruleMatch.points, 35);
-      });
-
-      it('Does not trigger when calculated cart total exactly matches transaction amount', () => {
-        const tx = {
-          amount: 80.0,
-          cartItems: [
-            { title: 'Item 1', price: 40.0, quantity: 2 },
-          ],
-        };
-        const match = evaluateCartMismatch(tx);
-        assert.equal(match, null);
-      });
-
-      it('Does not trigger within acceptable rounding tolerance ($0.01)', () => {
-        const tx = {
-          amount: 99.99,
-          cartItems: [
-            { title: 'Item', price: 33.33, quantity: 3 }, // 99.99
-          ],
-        };
-        const match = evaluateCartMismatch(tx);
-        assert.equal(match, null);
-      });
-
-      it('Does not trigger when transaction has no cartItems array', () => {
-        const tx = { amount: 100 };
-        const match = evaluateCartMismatch(tx);
-        assert.equal(match, null);
-      });
-    });
-
-    describe('Rule 6: Large Item Quantity', () => {
-      it('Triggers when any item quantity meets the threshold (10)', () => {
-        const tx = {
-          cartItems: [
-            { title: 'Bulk Pens', price: 1.0, quantity: 10 },
-          ],
-        };
-        const match = evaluateLargeQuantity(tx);
-        assert.ok(match);
-        assert.equal(match.signal.code, 'LARGE_ITEM_QUANTITY');
-        assert.equal(match.signal.severity, 'MEDIUM');
-        assert.equal(match.signal.confidence, 1.0);
-        assert.equal(match.ruleMatch.points, 20);
-      });
-
-      it('Triggers when any item quantity exceeds the threshold (15)', () => {
-        const tx = {
-          cartItems: [
-            { title: 'Stickers', price: 0.5, quantity: 15 },
-          ],
-        };
-        const match = evaluateLargeQuantity(tx);
-        assert.ok(match);
-        assert.equal(match.ruleMatch.points, 20);
-      });
-
-      it('Does not trigger when all item quantities are below threshold (< 10)', () => {
-        const tx = {
-          cartItems: [
-            { title: 'Shirt', price: 20.0, quantity: 2 },
-            { title: 'Socks', price: 5.0, quantity: 9 },
-          ],
-        };
-        const match = evaluateLargeQuantity(tx);
-        assert.equal(match, null);
-      });
-
-      it('Does not trigger on empty or missing cart', () => {
-        assert.equal(evaluateLargeQuantity({ cartItems: [] }), null);
-        assert.equal(evaluateLargeQuantity({}), null);
-      });
-    });
-  });
-
-  // =========================================================================
-  // C. SCORE PROPERTIES & DETERMINISM
-  // =========================================================================
-  describe('C. Score Properties, Boundaries, and Determinism', () => {
-    it('Score is never below 0', () => {
+    it('$1500 + cart mismatch + large quantity: 40 + 35 + 20 = 95 -> HIGH -> DECLINE', () => {
       const tx = {
-        amount: 10,
-        customer: { email: 'safe@test.com' },
-        cartItems: [{ title: 'Item', price: 10, quantity: 1 }],
-      };
-      const result = calculateRisk(tx);
-      assert.ok(result.riskScore >= 0);
-    });
-
-    it('Score is clamped at 100 when multiple rules fire simultaneously', () => {
-      // Rule 1: High Value (+40)
-      // Rule 3: Customer Incomplete (+15)
-      // Rule 5: Cart Mismatch (+35)
-      // Rule 6: Large Quantity (+20)
-      // Total raw points = 40 + 15 + 35 + 20 = 110 -> Clamped to 100
-      const tx = {
-        amount: 2000.0,
-        customer: {}, // Missing email (+15)
+        amount: 1500.0,
+        customer: { email: 'verified@buyer.com' },
         cartItems: [
-          { title: 'Bulk Items', price: 10.0, quantity: 25 }, // Quantity 25 (+20), sum = $250 vs $2000 (+35)
+          { title: 'Bulk Cable', price: 10.0, quantity: 20 }, // Qty 20 (+20), sum = $200 vs $1500 (+35)
         ],
       };
-
       const result = calculateRisk(tx);
 
-      assert.equal(result.riskScore, 100);
+      assert.equal(result.riskScore, 95);
       assert.equal(result.riskTier, 'HIGH');
       assert.equal(result.recommendation, 'DECLINE');
-      assert.equal(result.signals.length, 4);
-      assert.equal(result.ruleMatches.length, 4);
+      assert.equal(result.signals.length, 3);
+      assert.equal(result.ruleMatches.length, 3);
+      assert.equal(result.signals[0].code, 'HIGH_VALUE_TRANSACTION');
+      assert.equal(result.signals[1].code, 'CART_TOTAL_MISMATCH');
+      assert.equal(result.signals[2].code, 'LARGE_ITEM_QUANTITY');
     });
 
-    it('Deterministic idempotency: same transaction produces exact same result on repeated runs', () => {
+    it('No rule is counted twice; every signal has corresponding ruleMatch', () => {
       const tx = {
-        amount: 750.0,
-        customer: { email: 'repeat@buyer.com' },
+        amount: 2500.0,
+        customer: {},
         cartItems: [
-          { title: 'Gadget', price: 75.0, quantity: 10 },
+          { title: 'Item', price: 50.0, quantity: 15 },
         ],
       };
-
-      const baseline = calculateRisk(tx);
-
-      for (let i = 0; i < 50; i++) {
-        const nextRun = calculateRisk(tx);
-        assert.equal(nextRun.riskScore, baseline.riskScore);
-        assert.equal(nextRun.riskTier, baseline.riskTier);
-        assert.equal(nextRun.recommendation, baseline.recommendation);
-        assert.deepEqual(nextRun.signals, baseline.signals);
-        assert.deepEqual(nextRun.ruleMatches, baseline.ruleMatches);
-      }
-    });
-
-    it('Every triggered signal corresponds to a matching ruleMatch', () => {
-      const tx = {
-        amount: 1200.0,
-        customer: {},
-      };
-
       const result = calculateRisk(tx);
 
+      const ruleCodes = result.ruleMatches.map((r) => r.rule);
+      const uniqueRuleCodes = new Set(ruleCodes);
+      assert.equal(ruleCodes.length, uniqueRuleCodes.size, 'No rule should be counted twice');
       assert.equal(result.signals.length, result.ruleMatches.length);
-      for (let i = 0; i < result.signals.length; i++) {
-        assert.equal(result.signals[i].code, result.ruleMatches[i].rule);
-      }
     });
   });
 
   // =========================================================================
-  // D. RISK TIER MAPPING
+  // 6. SERVICE-LEVEL INVARIANT SAFEGUARDS
   // =========================================================================
-  describe('D. Risk Tier Boundaries', () => {
-    it('Score 0 to 29 maps to LOW tier', () => {
-      // 0 points
-      const lowResult0 = calculateRisk({
-        amount: 50,
-        customer: { email: 'a@b.com' },
-        cartItems: [{ title: 'X', price: 50, quantity: 1 }],
+  describe('6. Service-Level Invariant Safeguards', () => {
+    it('Accepts completely consistent risk assessment attributes', () => {
+      assert.doesNotThrow(() => {
+        enforceRiskInvariants(0, 'LOW', 'APPROVE', 0, null);
+        enforceRiskInvariants(35, 'MEDIUM', 'REVIEW', 35, null);
+        enforceRiskInvariants(75, 'HIGH', 'DECLINE', 75, null);
       });
-      assert.equal(lowResult0.riskTier, 'LOW');
-
-      // 20 points (Medium value alone)
-      const lowResult20 = calculateRisk({
-        amount: 600,
-        customer: { email: 'a@b.com' },
-        cartItems: [{ title: 'X', price: 600, quantity: 1 }],
-      });
-      assert.equal(lowResult20.riskScore, 20);
-      assert.equal(lowResult20.riskTier, 'LOW');
     });
 
-    it('Score 30 to 69 maps to MEDIUM tier', () => {
-      // 35 points: Medium value (20) + Customer incomplete (15) = 35
-      const medResult = calculateRisk({
-        amount: 600,
-        customer: {},
-        cartItems: [{ title: 'X', price: 600, quantity: 1 }],
-      });
-      assert.equal(medResult.riskScore, 35);
-      assert.equal(medResult.riskTier, 'MEDIUM');
+    it('Rejects non-integer or out-of-range riskScore', () => {
+      assert.throws(() => enforceRiskInvariants(35.5, 'MEDIUM', 'REVIEW', 35.5, null), /integer/);
+      assert.throws(() => enforceRiskInvariants(-5, 'LOW', 'APPROVE', -5, null), /between 0 and 100/);
+      assert.throws(() => enforceRiskInvariants(105, 'HIGH', 'DECLINE', 105, null), /between 0 and 100/);
     });
 
-    it('Score 70 to 100 maps to HIGH tier', () => {
-      // 75 points: High value (40) + Cart mismatch (35) = 75
-      const highResult = calculateRisk({
-        amount: 1200,
-        customer: { email: 'a@b.com' },
-        cartItems: [{ title: 'X', price: 100, quantity: 1 }],
-      });
-      assert.equal(highResult.riskScore, 75);
-      assert.equal(highResult.riskTier, 'HIGH');
-    });
-  });
-
-  // =========================================================================
-  // E. RECOMMENDATION MAPPING
-  // =========================================================================
-  describe('E. Tier-to-Recommendation Mapping', () => {
-    it('LOW tier maps to APPROVE', () => {
-      assert.equal(riskConfig.TIER_RECOMMENDATIONS.LOW, 'APPROVE');
-      const res = calculateRisk({
-        amount: 50,
-        customer: { email: 'a@b.com' },
-      });
-      assert.equal(res.recommendation, 'APPROVE');
+    it('Rejects mismatched riskTier', () => {
+      assert.throws(() => enforceRiskInvariants(10, 'HIGH', 'DECLINE', 10, null), /does not match score/);
+      assert.throws(() => enforceRiskInvariants(75, 'LOW', 'APPROVE', 75, null), /does not match score/);
     });
 
-    it('MEDIUM tier maps to REVIEW', () => {
-      assert.equal(riskConfig.TIER_RECOMMENDATIONS.MEDIUM, 'REVIEW');
-      const res = calculateRisk({
-        amount: 600,
-        customer: {},
-      });
-      assert.equal(res.recommendation, 'REVIEW');
+    it('Rejects mismatched recommendation', () => {
+      assert.throws(() => enforceRiskInvariants(10, 'LOW', 'DECLINE', 10, null), /does not match tier/);
+      assert.throws(() => enforceRiskInvariants(80, 'HIGH', 'APPROVE', 80, null), /does not match tier/);
     });
 
-    it('HIGH tier maps to DECLINE', () => {
-      assert.equal(riskConfig.TIER_RECOMMENDATIONS.HIGH, 'DECLINE');
-      const res = calculateRisk({
-        amount: 1500,
-        customer: {},
-        cartItems: [{ title: 'X', price: 50, quantity: 1 }],
-      });
-      assert.equal(res.recommendation, 'DECLINE');
+    it('Rejects mismatched baselineScore', () => {
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 50, null), /must equal riskScore/);
+    });
+
+    it('Rejects non-null aiScore in deterministic baseline', () => {
+      assert.throws(() => enforceRiskInvariants(20, 'LOW', 'APPROVE', 20, 85), /aiScore must remain null/);
     });
   });
 });

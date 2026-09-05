@@ -104,7 +104,7 @@ describe('MONGODB LIVE INTEGRATION — DETERMINISTIC RISK ENGINE', () => {
     }
   });
 
-  it('Merchant A executes risk assessment — RiskAssessment document persisted in MongoDB', async () => {
+  it('Merchant A executes risk assessment — RiskAssessment document persisted in MongoDB and adheres to response contract', async () => {
     const res = await fetch(`${baseUrl}/${txAId}/risk`, {
       method: 'POST',
       headers: {
@@ -116,12 +116,25 @@ describe('MONGODB LIVE INTEGRATION — DETERMINISTIC RISK ENGINE', () => {
     assert.equal(res.status, 201);
     assert.equal(data.success, true);
 
+    // Verify response contract
+    assert.ok(data.data.id);
+    assert.ok(data.data._id);
+    assert.equal(data.data.transactionId.toString(), txAId);
+    assert.equal(data.data.merchantId.toString(), merchantA._id.toString());
+    assert.equal(data.data.riskScore, 75);
+    assert.equal(data.data.riskTier, 'HIGH');
+    assert.equal(data.data.recommendation, 'DECLINE');
+    assert.equal(data.data.baselineScore, 75);
+    assert.equal(data.data.aiScore, null);
+    assert.equal(data.data.__v, undefined);
+    assert.equal(data.data.signals.length, 2);
+    assert.equal(data.data.ruleMatches.length, 2);
+
     // Verify in MongoDB directly
-    const storedAssessment = await RiskAssessment.findById(data.data._id);
+    const storedAssessment = await RiskAssessment.findById(data.data.id);
     assert.ok(storedAssessment);
     assert.equal(storedAssessment.transactionId.toString(), txAId);
     assert.equal(storedAssessment.merchantId.toString(), merchantA._id.toString());
-    // $1500 (40 pts) + cart mismatch (35 pts) = 75 pts -> HIGH tier / DECLINE
     assert.equal(storedAssessment.riskScore, 75);
     assert.equal(storedAssessment.riskTier, 'HIGH');
     assert.equal(storedAssessment.recommendation, 'DECLINE');
@@ -143,6 +156,8 @@ describe('MONGODB LIVE INTEGRATION — DETERMINISTIC RISK ENGINE', () => {
     assert.equal(data.success, true);
     assert.equal(data.data.transactionId.toString(), txAId);
     assert.equal(data.data.riskScore, 75);
+    assert.ok(data.data.id);
+    assert.equal(data.data.__v, undefined);
   });
 
   it('Merchant B receives 404 TRANSACTION_NOT_FOUND when attempting to analyze Merchant A transaction', async () => {
@@ -172,32 +187,36 @@ describe('MONGODB LIVE INTEGRATION — DETERMINISTIC RISK ENGINE', () => {
     assert.equal(data.error.code, 'TRANSACTION_NOT_FOUND');
   });
 
-  it('Re-running analysis creates a second historical assessment; GET retrieves newest record', async () => {
-    // Delay 10ms to ensure distinct timestamp
+  it('Re-running analysis 3 times creates 3 historical assessment documents; GET retrieves the 3rd/newest record', async () => {
+    // 2nd run
     await new Promise((r) => setTimeout(r, 15));
-
     const res2 = await fetch(`${baseUrl}/${txAId}/risk`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${tokenA}`,
-      },
+      headers: { Authorization: `Bearer ${tokenA}` },
     });
     const data2 = await res2.json();
     assert.equal(res2.status, 201);
 
-    // Verify 2 records exist in MongoDB for this transaction
-    const allAssessments = await RiskAssessment.find({ transactionId: txAId }).sort({ createdAt: -1 });
-    assert.equal(allAssessments.length, 2);
-    assert.equal(allAssessments[0]._id.toString(), data2.data._id.toString());
+    // 3rd run
+    await new Promise((r) => setTimeout(r, 15));
+    const res3 = await fetch(`${baseUrl}/${txAId}/risk`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${tokenA}` },
+    });
+    const data3 = await res3.json();
+    assert.equal(res3.status, 201);
 
-    // Verify GET retrieves newest record
+    // Verify exactly 3 records exist in MongoDB for this transaction
+    const allAssessments = await RiskAssessment.find({ transactionId: txAId }).sort({ createdAt: -1 });
+    assert.equal(allAssessments.length, 3);
+    assert.equal(allAssessments[0]._id.toString(), data3.data.id);
+
+    // Verify GET retrieves the 3rd / newest record
     const getRes = await fetch(`${baseUrl}/${txAId}/risk`, {
-      headers: {
-        Authorization: `Bearer ${tokenA}`,
-      },
+      headers: { Authorization: `Bearer ${tokenA}` },
     });
     const getData = await getRes.json();
     assert.equal(getRes.status, 200);
-    assert.equal(getData.data._id.toString(), data2.data._id.toString());
+    assert.equal(getData.data.id, data3.data.id);
   });
 });

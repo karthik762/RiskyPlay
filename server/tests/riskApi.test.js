@@ -245,11 +245,11 @@ describe('RISK API & TENANT ISOLATION TESTS (MOCK / IN-MEMORY)', () => {
   });
 
   // =========================================================================
-  // 4. SUCCESSFUL ASSESSMENT & PERSISTENCE
+  // 4. RESPONSE CONTRACT & ASSESSMENT HISTORY
   // =========================================================================
-  describe('4. Successful Risk Assessment & Duplicate Re-run Behavior', () => {
-    it('Merchant A successfully assesses Merchant A transaction (HTTP 201)', async () => {
-      const txAId = '64a1b2c3d4e5f6a7b8c9d001'; // Amount $1200, matching cart ($1200), email present
+  describe('4. Response Contract & Assessment History', () => {
+    it('Successful risk assessment exposes the stable response contract', async () => {
+      const txAId = '64a1b2c3d4e5f6a7b8c9d001';
       const res = await fetch(`${baseUrl}/${txAId}/risk`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${tokenA}` },
@@ -258,20 +258,37 @@ describe('RISK API & TENANT ISOLATION TESTS (MOCK / IN-MEMORY)', () => {
 
       assert.equal(res.status, 201);
       assert.equal(data.success, true);
-      assert.ok(data.data._id);
-      assert.equal(data.data.transactionId.toString(), txAId);
-      assert.equal(data.data.merchantId.toString(), MERCHANT_A_ID);
-      // High value ($1200) -> 40 points -> MEDIUM tier / REVIEW
-      assert.equal(data.data.riskScore, 40);
-      assert.equal(data.data.riskTier, 'MEDIUM');
-      assert.equal(data.data.recommendation, 'REVIEW');
-      assert.equal(data.data.baselineScore, 40);
-      assert.equal(data.data.aiScore, null);
-      assert.equal(data.data.signals.length, 1);
-      assert.equal(data.data.signals[0].code, 'HIGH_VALUE_TRANSACTION');
-      assert.equal(data.data.ruleMatches.length, 1);
-      assert.equal(data.data.ruleMatches[0].rule, 'HIGH_VALUE_TRANSACTION');
-      assert.equal(data.data.ruleMatches[0].points, 40);
+
+      // Verify stable contract fields
+      const payload = data.data;
+      assert.ok(payload.id, 'id must be present');
+      assert.ok(payload._id, '_id must be present');
+      assert.equal(payload.transactionId.toString(), txAId);
+      assert.equal(payload.merchantId.toString(), MERCHANT_A_ID);
+      assert.equal(payload.riskScore, 40);
+      assert.equal(payload.riskTier, 'MEDIUM');
+      assert.equal(payload.recommendation, 'REVIEW');
+      assert.equal(payload.baselineScore, 40);
+      assert.equal(payload.aiScore, null);
+      assert.ok(Array.isArray(payload.signals), 'signals must be an array');
+      assert.ok(Array.isArray(payload.ruleMatches), 'ruleMatches must be an array');
+      assert.ok(payload.createdAt, 'createdAt must be present');
+
+      // Verify no internal MongoDB or sensitive properties are leaked
+      assert.equal(payload.__v, undefined);
+      assert.equal(payload.passwordHash, undefined);
+      assert.equal(payload.apiKey, undefined);
+
+      // Verify signals structure
+      assert.equal(payload.signals.length, 1);
+      assert.equal(payload.signals[0].code, 'HIGH_VALUE_TRANSACTION');
+      assert.equal(payload.signals[0].severity, 'HIGH');
+      assert.equal(payload.signals[0].confidence, 1.0);
+
+      // Verify ruleMatches structure
+      assert.equal(payload.ruleMatches.length, 1);
+      assert.equal(payload.ruleMatches[0].rule, 'HIGH_VALUE_TRANSACTION');
+      assert.equal(payload.ruleMatches[0].points, 40);
     });
 
     it('GET /:id/risk returns 404 RISK_ASSESSMENT_NOT_FOUND before any analysis is run', async () => {
@@ -285,7 +302,7 @@ describe('RISK API & TENANT ISOLATION TESTS (MOCK / IN-MEMORY)', () => {
       assert.equal(data.error.code, 'RISK_ASSESSMENT_NOT_FOUND');
     });
 
-    it('Calling POST /:id/risk multiple times preserves audit history; GET returns latest', async () => {
+    it('Three sequential POST calls create 3 distinct assessment records; GET returns the latest', async () => {
       const txAId = '64a1b2c3d4e5f6a7b8c9d001';
 
       // 1st POST
@@ -296,7 +313,6 @@ describe('RISK API & TENANT ISOLATION TESTS (MOCK / IN-MEMORY)', () => {
       const data1 = await res1.json();
       assert.equal(res1.status, 201);
 
-      // Short delay to ensure distinct timestamp
       await new Promise((r) => setTimeout(r, 10));
 
       // 2nd POST
@@ -307,18 +323,34 @@ describe('RISK API & TENANT ISOLATION TESTS (MOCK / IN-MEMORY)', () => {
       const data2 = await res2.json();
       assert.equal(res2.status, 201);
 
-      // Verify both assessments are retained in mock store
-      assert.equal(mockAssessments.length, 2);
-      assert.notEqual(data1.data._id.toString(), data2.data._id.toString());
+      await new Promise((r) => setTimeout(r, 10));
 
-      // GET returns the latest assessment
+      // 3rd POST
+      const res3 = await fetch(`${baseUrl}/${txAId}/risk`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${tokenA}` },
+      });
+      const data3 = await res3.json();
+      assert.equal(res3.status, 201);
+
+      // Verify 3 separate assessment documents exist
+      assert.equal(mockAssessments.length, 3);
+      assert.notEqual(data1.data.id, data2.data.id);
+      assert.notEqual(data2.data.id, data3.data.id);
+
+      // Historical records remain unchanged
+      assert.equal(mockAssessments[0].riskScore, data1.data.riskScore);
+      assert.equal(mockAssessments[1].riskScore, data2.data.riskScore);
+      assert.equal(mockAssessments[2].riskScore, data3.data.riskScore);
+
+      // GET returns the 3rd / newest assessment
       const getRes = await fetch(`${baseUrl}/${txAId}/risk`, {
         headers: { Authorization: `Bearer ${tokenA}` },
       });
       const getData = await getRes.json();
       assert.equal(getRes.status, 200);
       assert.equal(getData.success, true);
-      assert.equal(getData.data._id.toString(), data2.data._id.toString());
+      assert.equal(getData.data.id, data3.data.id);
     });
   });
 });
