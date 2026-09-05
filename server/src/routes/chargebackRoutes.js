@@ -42,8 +42,21 @@ router.patch(
   chargebackController.updateChargebackStatus
 );
 
+// GET /api/v1/chargebacks/:id/traces - Retrieve multi-agent execution traces
+const traceController = require('../controllers/traceController');
+router.get(
+  '/:entityId/traces',
+  traceController.getEntityTraces
+);
+
+
 // Mount evidence sub-resource router under /:chargebackId/evidence
 const evidenceRoutes = require('./evidenceRoutes');
 router.use('/:chargebackId/evidence', evidenceRoutes);
 
+// Mount defensive response sub-resource router under /:chargebackId/response
+const chargebackResponseRoutes = require('./chargebackResponseRoutes');
+router.use('/:chargebackId/response', chargebackResponseRoutes);
+
 module.exports = router;
+

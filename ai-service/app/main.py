@@ -4,6 +4,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes.chargeback import router as chargeback_router
 from app.routes.risk import router as risk_router
 
 logging.basicConfig(
@@ -44,3 +45,4 @@ async def health_check():
 
 # Mount API v1 routes
 app.include_router(risk_router, prefix="/api/v1")
+app.include_router(chargeback_router, prefix="/api/v1")

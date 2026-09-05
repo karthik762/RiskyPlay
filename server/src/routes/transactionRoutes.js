@@ -57,6 +57,14 @@ router.get(
   riskController.getLatestRiskAssessment
 );
 
+// GET /api/v1/transactions/:id/traces - Retrieve multi-agent execution traces
+const traceController = require('../controllers/traceController');
+router.get(
+  '/:entityId/traces',
+  validate(transactionIdParamSchema.rename ? transactionIdParamSchema : transactionIdParamSchema),
+  traceController.getEntityTraces
+);
+
 // POST /api/v1/transactions/:id/risk/orchestrate - Run multi-agent risk orchestration
 router.post(
   '/:id/risk/orchestrate',
@@ -65,3 +73,4 @@ router.post(
 );
 
 module.exports = router;
+

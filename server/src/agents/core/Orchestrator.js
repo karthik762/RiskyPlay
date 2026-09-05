@@ -57,6 +57,7 @@ class Orchestrator {
    */
   async _recordTrace({
     runId,
+    entityType = 'TRANSACTION_RISK',
     entityId,
     agentName,
     stepIndex,
@@ -83,7 +84,7 @@ class Orchestrator {
 
       await this.traceModel.create({
         runId,
-        entityType: 'TRANSACTION_RISK',
+        entityType,
         entityId,
         agentName,
         stepIndex,
@@ -102,12 +103,16 @@ class Orchestrator {
   }
 
   /**
-   * Orchestrates multi-agent execution for a transaction.
+   * Orchestrates multi-agent execution for a transaction or chargeback rebuttal.
    *
    * @param {Object} params
    * @param {string} params.merchantId - Authenticated merchant identifier
-   * @param {string} params.transactionId - Subject transaction identifier
-   * @param {Object} params.transaction - Tenant-scoped transaction metadata
+   * @param {string} [params.transactionId] - Subject transaction identifier
+   * @param {Object} [params.transaction] - Tenant-scoped transaction metadata
+   * @param {string} [params.chargebackId] - Subject chargeback identifier (optional)
+   * @param {Object} [params.chargeback] - Tenant-scoped chargeback metadata (optional)
+   * @param {Object} [params.evidenceIndex] - Pre-built evidence index (optional)
+   * @param {string} [params.entityType] - Scoped entity type ('TRANSACTION_RISK' or 'CHARGEBACK_REBUTTAL')
    * @param {Object} [params.deterministicAssessment] - Pre-calculated baseline risk
    * @param {Array<string>} [params.agentNames] - Sequence of agent names to execute
    * @param {number} [params.timeoutMs] - Optional per-agent timeout override
@@ -118,6 +123,10 @@ class Orchestrator {
     merchantId,
     transactionId,
     transaction,
+    chargebackId = null,
+    chargeback = null,
+    evidenceIndex = null,
+    entityType = null,
     deterministicAssessment = null,
     agentNames = ['TRANSACTION_RISK_BASELINE', 'RISK_ANALYST', 'RISK_VERIFICATION'],
     timeoutMs = null,
@@ -125,12 +134,18 @@ class Orchestrator {
   }) {
     const runId = crypto.randomUUID();
     const effectiveTimeoutMs = timeoutMs || this.defaultTimeoutMs;
+    const resolvedEntityType = entityType || (chargebackId || chargeback ? 'CHARGEBACK_REBUTTAL' : 'TRANSACTION_RISK');
+    const resolvedEntityId = chargebackId || chargeback?._id || transaction?._id || transactionId;
 
     let currentContext = new AgentContext({
       runId,
       merchantId,
       transactionId,
       transaction,
+      chargebackId,
+      chargeback,
+      evidenceIndex,
+      entityType: resolvedEntityType,
       deterministicAssessment,
       metadata,
     });
@@ -193,14 +208,22 @@ class Orchestrator {
       // Record operational trace in database
       await this._recordTrace({
         runId,
-        entityId: transaction._id || transactionId,
+        entityType: resolvedEntityType,
+        entityId: resolvedEntityId,
         agentName: name,
         stepIndex,
-        inputData: {
-          transactionId,
-          amount: currentContext.transaction.amount,
-          currency: currentContext.transaction.currency,
-        },
+        inputData: currentContext.chargebackId
+          ? {
+              chargebackId: currentContext.chargebackId,
+              transactionId: currentContext.transactionId,
+              amount: currentContext.transaction?.amount,
+              evidenceCount: currentContext.evidenceIndex?.items?.length || 0,
+            }
+          : {
+              transactionId,
+              amount: currentContext.transaction?.amount,
+              currency: currentContext.transaction?.currency,
+            },
         reasoning: agentResult.reasoning,
         outputData: agentResult.output,
         latencyMs,
@@ -250,6 +273,7 @@ class Orchestrator {
       runId,
       merchantId,
       transactionId,
+      chargebackId: currentContext.chargebackId || undefined,
       status: overallStatus,
       decision,
       agents: agentResponses,

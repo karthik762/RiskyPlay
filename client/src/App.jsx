@@ -1,122 +1,96 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import DashboardPage from './pages/DashboardPage';
+import TransactionsPage from './pages/TransactionsPage';
+import ChargebacksPage from './pages/ChargebacksPage';
+import AgentTracesPage from './pages/AgentTracesPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const { isAuthenticated, loading, login, fillDemo } = useAuth();
+  const [unauthView, setUnauthView] = useState('landing'); // 'landing', 'login', 'signup'
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'transactions', 'chargebacks', 'traces', 'analytics'
+  const [selectedChargebackId, setSelectedChargebackId] = useState(null);
 
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg-base)',
+        color: 'var(--text-secondary)',
+        fontFamily: 'var(--font-sans)',
+      }}>
+        Initializing RiskyPlay Defense Platform...
+      </div>
+    );
+  }
+
+  // Unauthenticated Flow
+  if (!isAuthenticated) {
+    if (unauthView === 'login') {
+      return <LoginPage onSwitchToSignup={() => setUnauthView('signup')} />;
+    }
+    if (unauthView === 'signup') {
+      return <SignupPage onSwitchToLogin={() => setUnauthView('login')} />;
+    }
+    return (
+      <LandingPage
+        onEnterDemo={async () => {
+          const demo = fillDemo();
+          try {
+            await login(demo.email, demo.password);
+          } catch (err) {
+            setUnauthView('login');
+          }
+        }}
+        onOpenLogin={() => setUnauthView('login')}
+        onOpenSignup={() => setUnauthView('signup')}
+      />
+    );
+  }
+
+  // Authenticated Merchant Workspace
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-layout">
+      <div className="main-content">
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div style={{ display: 'flex', flex: 1 }}>
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          <main style={{ flex: 1, minWidth: 0, overflowY: 'auto' }}>
+            {activeTab === 'dashboard' && (
+              <DashboardPage
+                setActiveTab={setActiveTab}
+                setSelectedChargebackId={setSelectedChargebackId}
+              />
+            )}
+            {activeTab === 'transactions' && <TransactionsPage />}
+            {activeTab === 'chargebacks' && (
+              <ChargebacksPage
+                selectedChargebackId={selectedChargebackId}
+                setSelectedChargebackId={setSelectedChargebackId}
+              />
+            )}
+            {activeTab === 'traces' && <AgentTracesPage />}
+            {activeTab === 'analytics' && <AnalyticsPage />}
+          </main>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}

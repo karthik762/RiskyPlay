@@ -1,0 +1,4482 @@
+[
+  {
+    "id": "eval_approve_001",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 19.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1001",
+        "email": "customer1@example.com",
+        "phone": "+15550100001"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1007",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_1",
+          "title": "Apparel Standard Item 1",
+          "price": 19.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_002",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 23.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1002",
+        "email": "customer2@example.com",
+        "phone": "+15550100002"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1014",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_2",
+          "title": "Digital Goods Standard Item 2",
+          "price": 23.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_003",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 27.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1003",
+        "email": "customer3@example.com",
+        "phone": "+15550100003"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1021",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_3",
+          "title": "Home & Kitchen Standard Item 3",
+          "price": 27.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_004",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 32,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1004",
+        "email": "customer4@example.com",
+        "phone": "+15550100004"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1028",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_4",
+          "title": "Gaming Standard Item 4",
+          "price": 32,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_005",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 36.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1005",
+        "email": "customer5@example.com",
+        "phone": "+15550100005"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1035",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_5",
+          "title": "Jewelry Standard Item 5",
+          "price": 36.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_006",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 40.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1006",
+        "email": "customer6@example.com",
+        "phone": "+15550100006"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1042",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_6",
+          "title": "Electronics Standard Item 6",
+          "price": 40.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_007",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 44.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1007",
+        "email": "customer7@example.com",
+        "phone": "+15550100007"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1049",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_7",
+          "title": "Apparel Standard Item 7",
+          "price": 44.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_008",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 49,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1008",
+        "email": "customer8@example.com",
+        "phone": "+15550100008"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1056",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_8",
+          "title": "Digital Goods Standard Item 8",
+          "price": 49,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_009",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 53.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1009",
+        "email": "customer9@example.com",
+        "phone": "+15550100009"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1063",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_9",
+          "title": "Home & Kitchen Standard Item 9",
+          "price": 53.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_010",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 57.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1010",
+        "email": "customer10@example.com",
+        "phone": "+15550100010"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1070",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_10",
+          "title": "Gaming Standard Item 10",
+          "price": 57.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_011",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 61.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1011",
+        "email": "customer11@example.com",
+        "phone": "+15550100011"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1077",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_11",
+          "title": "Jewelry Standard Item 11",
+          "price": 61.75,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_012",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 66,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1012",
+        "email": "customer12@example.com",
+        "phone": "+15550100012"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1084",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_12",
+          "title": "Electronics Standard Item 12",
+          "price": 66,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_013",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 70.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1013",
+        "email": "customer13@example.com",
+        "phone": "+15550100013"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1091",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_13",
+          "title": "Apparel Standard Item 13",
+          "price": 70.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_014",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 74.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1014",
+        "email": "customer14@example.com",
+        "phone": "+15550100014"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1098",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_14",
+          "title": "Digital Goods Standard Item 14",
+          "price": 74.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_015",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 78.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1015",
+        "email": "customer15@example.com",
+        "phone": "+15550100015"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1105",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_15",
+          "title": "Home & Kitchen Standard Item 15",
+          "price": 78.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_016",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 83,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1016",
+        "email": "customer16@example.com",
+        "phone": "+15550100016"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1112",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_16",
+          "title": "Gaming Standard Item 16",
+          "price": 83,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_017",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 87.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1017",
+        "email": "customer17@example.com",
+        "phone": "+15550100017"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1119",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_17",
+          "title": "Jewelry Standard Item 17",
+          "price": 87.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_018",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 91.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1018",
+        "email": "customer18@example.com",
+        "phone": "+15550100018"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1126",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_18",
+          "title": "Electronics Standard Item 18",
+          "price": 91.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_019",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 95.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1019",
+        "email": "customer19@example.com",
+        "phone": "+15550100019"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1133",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_19",
+          "title": "Apparel Standard Item 19",
+          "price": 95.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_020",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 100,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1020",
+        "email": "customer20@example.com",
+        "phone": "+15550100020"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1140",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_20",
+          "title": "Digital Goods Standard Item 20",
+          "price": 100,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_021",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 104.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1021",
+        "email": "customer21@example.com",
+        "phone": "+15550100021"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1147",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_21",
+          "title": "Home & Kitchen Standard Item 21",
+          "price": 104.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_022",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 108.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1022",
+        "email": "customer22@example.com",
+        "phone": "+15550100022"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1154",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_22",
+          "title": "Gaming Standard Item 22",
+          "price": 108.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_023",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 112.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1023",
+        "email": "customer23@example.com",
+        "phone": "+15550100023"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1161",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_23",
+          "title": "Jewelry Standard Item 23",
+          "price": 112.75,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_024",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 117,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1024",
+        "email": "customer24@example.com",
+        "phone": "+15550100024"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1168",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_24",
+          "title": "Electronics Standard Item 24",
+          "price": 117,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_025",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 121.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1025",
+        "email": "customer25@example.com",
+        "phone": "+15550100025"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1175",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_25",
+          "title": "Apparel Standard Item 25",
+          "price": 121.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_026",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 125.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1026",
+        "email": "customer26@example.com",
+        "phone": "+15550100026"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1182",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_26",
+          "title": "Digital Goods Standard Item 26",
+          "price": 125.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_027",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 129.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1027",
+        "email": "customer27@example.com",
+        "phone": "+15550100027"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1189",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_27",
+          "title": "Home & Kitchen Standard Item 27",
+          "price": 129.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_028",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 134,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1028",
+        "email": "customer28@example.com",
+        "phone": "+15550100028"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1196",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_28",
+          "title": "Gaming Standard Item 28",
+          "price": 134,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_029",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 138.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1029",
+        "email": "customer29@example.com",
+        "phone": "+15550100029"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1203",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_29",
+          "title": "Jewelry Standard Item 29",
+          "price": 138.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_030",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 142.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1030",
+        "email": "customer30@example.com",
+        "phone": "+15550100030"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1210",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_30",
+          "title": "Electronics Standard Item 30",
+          "price": 142.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_031",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 146.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1031",
+        "email": "customer31@example.com",
+        "phone": "+15550100031"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1217",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_31",
+          "title": "Apparel Standard Item 31",
+          "price": 146.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_032",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 151,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1032",
+        "email": "customer32@example.com",
+        "phone": "+15550100032"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1224",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_32",
+          "title": "Digital Goods Standard Item 32",
+          "price": 151,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_033",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 155.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1033",
+        "email": "customer33@example.com",
+        "phone": "+15550100033"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1231",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_33",
+          "title": "Home & Kitchen Standard Item 33",
+          "price": 155.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_034",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 159.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1034",
+        "email": "customer34@example.com",
+        "phone": "+15550100034"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1238",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_34",
+          "title": "Gaming Standard Item 34",
+          "price": 159.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_035",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 163.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1035",
+        "email": "customer35@example.com",
+        "phone": "+15550100035"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1245",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_35",
+          "title": "Jewelry Standard Item 35",
+          "price": 163.75,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_036",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 168,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1036",
+        "email": "customer36@example.com",
+        "phone": "+15550100036"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1252",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_36",
+          "title": "Electronics Standard Item 36",
+          "price": 168,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_037",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 172.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1037",
+        "email": "customer37@example.com",
+        "phone": "+15550100037"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1259",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_37",
+          "title": "Apparel Standard Item 37",
+          "price": 172.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_038",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 176.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1038",
+        "email": "customer38@example.com",
+        "phone": "+15550100038"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1266",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_38",
+          "title": "Digital Goods Standard Item 38",
+          "price": 176.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_039",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 180.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1039",
+        "email": "customer39@example.com",
+        "phone": "+15550100039"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1273",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_39",
+          "title": "Home & Kitchen Standard Item 39",
+          "price": 180.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_040",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 185,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1040",
+        "email": "customer40@example.com",
+        "phone": "+15550100040"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1280",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_40",
+          "title": "Gaming Standard Item 40",
+          "price": 185,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_041",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 189.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1041",
+        "email": "customer41@example.com",
+        "phone": "+15550100041"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1287",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_41",
+          "title": "Jewelry Standard Item 41",
+          "price": 189.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_042",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 193.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1042",
+        "email": "customer42@example.com",
+        "phone": "+15550100042"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1294",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_42",
+          "title": "Electronics Standard Item 42",
+          "price": 193.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_043",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 17.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1043",
+        "email": "customer43@example.com",
+        "phone": "+15550100043"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1301",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_43",
+          "title": "Apparel Standard Item 43",
+          "price": 17.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_044",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 22,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1044",
+        "email": "customer44@example.com",
+        "phone": "+15550100044"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1308",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_44",
+          "title": "Digital Goods Standard Item 44",
+          "price": 22,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_045",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 26.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1045",
+        "email": "customer45@example.com",
+        "phone": "+15550100045"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1315",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_45",
+          "title": "Home & Kitchen Standard Item 45",
+          "price": 26.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_046",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 30.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1046",
+        "email": "customer46@example.com",
+        "phone": "+15550100046"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1322",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_46",
+          "title": "Gaming Standard Item 46",
+          "price": 30.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_047",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 34.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1047",
+        "email": "customer47@example.com",
+        "phone": "+15550100047"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1329",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_47",
+          "title": "Jewelry Standard Item 47",
+          "price": 34.75,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_048",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 39,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1048",
+        "email": "customer48@example.com",
+        "phone": "+15550100048"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1336",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_48",
+          "title": "Electronics Standard Item 48",
+          "price": 39,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_049",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 43.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1049",
+        "email": "customer49@example.com",
+        "phone": "+15550100049"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1343",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_49",
+          "title": "Apparel Standard Item 49",
+          "price": 43.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_050",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 47.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1050",
+        "email": "customer50@example.com",
+        "phone": "+15550100050"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1350",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_50",
+          "title": "Digital Goods Standard Item 50",
+          "price": 47.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_051",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 51.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1051",
+        "email": "customer51@example.com",
+        "phone": "+15550100051"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1357",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_51",
+          "title": "Home & Kitchen Standard Item 51",
+          "price": 51.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_052",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 56,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1052",
+        "email": "customer52@example.com",
+        "phone": "+15550100052"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1364",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_52",
+          "title": "Gaming Standard Item 52",
+          "price": 56,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_053",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 60.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1053",
+        "email": "customer53@example.com",
+        "phone": "+15550100053"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1371",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_53",
+          "title": "Jewelry Standard Item 53",
+          "price": 60.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_054",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 64.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1054",
+        "email": "customer54@example.com",
+        "phone": "+15550100054"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1378",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_54",
+          "title": "Electronics Standard Item 54",
+          "price": 64.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_055",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 68.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1055",
+        "email": "customer55@example.com",
+        "phone": "+15550100055"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1385",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_55",
+          "title": "Apparel Standard Item 55",
+          "price": 68.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_056",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 73,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1056",
+        "email": "customer56@example.com",
+        "phone": "+15550100056"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1392",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_56",
+          "title": "Digital Goods Standard Item 56",
+          "price": 73,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_057",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 77.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1057",
+        "email": "customer57@example.com",
+        "phone": "+15550100057"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1399",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_57",
+          "title": "Home & Kitchen Standard Item 57",
+          "price": 77.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_058",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 81.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1058",
+        "email": "customer58@example.com",
+        "phone": "+15550100058"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1406",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_58",
+          "title": "Gaming Standard Item 58",
+          "price": 81.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_059",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 85.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1059",
+        "email": "customer59@example.com",
+        "phone": "+15550100059"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1413",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_59",
+          "title": "Jewelry Standard Item 59",
+          "price": 85.75,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_060",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 90,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1060",
+        "email": "customer60@example.com",
+        "phone": "+15550100060"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1420",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_60",
+          "title": "Electronics Standard Item 60",
+          "price": 90,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_061",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 94.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1061",
+        "email": "customer61@example.com",
+        "phone": "+15550100061"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1427",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_61",
+          "title": "Apparel Standard Item 61",
+          "price": 94.25,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_062",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 98.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1062",
+        "email": "customer62@example.com",
+        "phone": "+15550100062"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1434",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_62",
+          "title": "Digital Goods Standard Item 62",
+          "price": 98.5,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_063",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 102.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1063",
+        "email": "customer63@example.com",
+        "phone": "+15550100063"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1441",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_63",
+          "title": "Home & Kitchen Standard Item 63",
+          "price": 102.75,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_064",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 107,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1064",
+        "email": "customer64@example.com",
+        "phone": "+15550100064"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1448",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_64",
+          "title": "Gaming Standard Item 64",
+          "price": 107,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_065",
+    "scenario": "Standard legitimate checkout - Jewelry",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 111.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1065",
+        "email": "customer65@example.com",
+        "phone": "+15550100065"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1455",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_jew_65",
+          "title": "Jewelry Standard Item 65",
+          "price": 111.25,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_066",
+    "scenario": "Standard legitimate checkout - Electronics",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 115.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1066",
+        "email": "customer66@example.com",
+        "phone": "+15550100066"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1462",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_ele_66",
+          "title": "Electronics Standard Item 66",
+          "price": 115.5,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_067",
+    "scenario": "Standard legitimate checkout - Apparel",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 119.75,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1067",
+        "email": "customer67@example.com",
+        "phone": "+15550100067"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1469",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_67",
+          "title": "Apparel Standard Item 67",
+          "price": 119.75,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_068",
+    "scenario": "Standard legitimate checkout - Digital Goods",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 124,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1068",
+        "email": "customer68@example.com",
+        "phone": "+15550100068"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1476",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_dig_68",
+          "title": "Digital Goods Standard Item 68",
+          "price": 124,
+          "quantity": 1,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_069",
+    "scenario": "Standard legitimate checkout - Home & Kitchen",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 128.25,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1069",
+        "email": "customer69@example.com",
+        "phone": "+15550100069"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1483",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_hom_69",
+          "title": "Home & Kitchen Standard Item 69",
+          "price": 128.25,
+          "quantity": 1,
+          "category": "Home & Kitchen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_approve_070",
+    "scenario": "Standard legitimate checkout - Gaming",
+    "groundTruth": "APPROVE",
+    "groundTruthTier": "LOW",
+    "isFraud": false,
+    "transaction": {
+      "amount": 132.5,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_legit_1070",
+        "email": "customer70@example.com",
+        "phone": "+15550100070"
+      },
+      "paymentMethod": {
+        "cardBin": "411111",
+        "cardLast4": "1490",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_gam_70",
+          "title": "Gaming Standard Item 70",
+          "price": 132.5,
+          "quantity": 1,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_001",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2001",
+        "email": "buyer1@gmail.com",
+        "phone": "+15550200001"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2009",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_1",
+          "title": "Gaming Accessory Pack 1",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_002",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_2@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2018",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_2",
+          "title": "Designer Jacket 2",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_003",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2003",
+        "email": "buyer3@gmail.com",
+        "phone": "+15550200003"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2027",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_3",
+          "title": "Premium Electronics Unit 3",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_004",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2004",
+        "email": "buyer4@gmail.com",
+        "phone": "+15550200004"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2036",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_4",
+          "title": "Gaming Accessory Pack 4",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_005",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_5@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2045",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_5",
+          "title": "Designer Jacket 5",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_006",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2006",
+        "email": "buyer6@gmail.com",
+        "phone": "+15550200006"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2054",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_6",
+          "title": "Premium Electronics Unit 6",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_007",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2007",
+        "email": "buyer7@gmail.com",
+        "phone": "+15550200007"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2063",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_7",
+          "title": "Gaming Accessory Pack 7",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_008",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_8@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2072",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_8",
+          "title": "Designer Jacket 8",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_009",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2009",
+        "email": "buyer9@gmail.com",
+        "phone": "+15550200009"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2081",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_9",
+          "title": "Premium Electronics Unit 9",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_010",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2010",
+        "email": "buyer10@gmail.com",
+        "phone": "+15550200010"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2090",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_10",
+          "title": "Gaming Accessory Pack 10",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_011",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_11@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2099",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_11",
+          "title": "Designer Jacket 11",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_012",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2012",
+        "email": "buyer12@gmail.com",
+        "phone": "+15550200012"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2108",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_12",
+          "title": "Premium Electronics Unit 12",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_013",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2013",
+        "email": "buyer13@gmail.com",
+        "phone": "+15550200013"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2117",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_13",
+          "title": "Gaming Accessory Pack 13",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_014",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_14@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2126",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_14",
+          "title": "Designer Jacket 14",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_015",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2015",
+        "email": "buyer15@gmail.com",
+        "phone": "+15550200015"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2135",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_15",
+          "title": "Premium Electronics Unit 15",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_016",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2016",
+        "email": "buyer16@gmail.com",
+        "phone": "+15550200016"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2144",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_16",
+          "title": "Gaming Accessory Pack 16",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_017",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_17@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2153",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_17",
+          "title": "Designer Jacket 17",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_018",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2018",
+        "email": "buyer18@gmail.com",
+        "phone": "+15550200018"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2162",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_18",
+          "title": "Premium Electronics Unit 18",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_019",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2019",
+        "email": "buyer19@gmail.com",
+        "phone": "+15550200019"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2171",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_19",
+          "title": "Gaming Accessory Pack 19",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_020",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_20@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2180",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_20",
+          "title": "Designer Jacket 20",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_021",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2021",
+        "email": "buyer21@gmail.com",
+        "phone": "+15550200021"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2189",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_21",
+          "title": "Premium Electronics Unit 21",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_022",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2022",
+        "email": "buyer22@gmail.com",
+        "phone": "+15550200022"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2198",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_22",
+          "title": "Gaming Accessory Pack 22",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_023",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_23@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2207",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_23",
+          "title": "Designer Jacket 23",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_024",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2024",
+        "email": "buyer24@gmail.com",
+        "phone": "+15550200024"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2216",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_24",
+          "title": "Premium Electronics Unit 24",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_025",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2025",
+        "email": "buyer25@gmail.com",
+        "phone": "+15550200025"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2225",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_25",
+          "title": "Gaming Accessory Pack 25",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_026",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_26@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2234",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_26",
+          "title": "Designer Jacket 26",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_027",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2027",
+        "email": "buyer27@gmail.com",
+        "phone": "+15550200027"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2243",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_27",
+          "title": "Premium Electronics Unit 27",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_028",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2028",
+        "email": "buyer28@gmail.com",
+        "phone": "+15550200028"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2252",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_28",
+          "title": "Gaming Accessory Pack 28",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_029",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_29@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2261",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_29",
+          "title": "Designer Jacket 29",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_030",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2030",
+        "email": "buyer30@gmail.com",
+        "phone": "+15550200030"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2270",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_30",
+          "title": "Premium Electronics Unit 30",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_031",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2031",
+        "email": "buyer31@gmail.com",
+        "phone": "+15550200031"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2279",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_31",
+          "title": "Gaming Accessory Pack 31",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_032",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_32@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2288",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_32",
+          "title": "Designer Jacket 32",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_033",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2033",
+        "email": "buyer33@gmail.com",
+        "phone": "+15550200033"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2297",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_33",
+          "title": "Premium Electronics Unit 33",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_034",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2034",
+        "email": "buyer34@gmail.com",
+        "phone": "+15550200034"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2306",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_34",
+          "title": "Gaming Accessory Pack 34",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_035",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_35@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2315",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_35",
+          "title": "Designer Jacket 35",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_036",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2036",
+        "email": "buyer36@gmail.com",
+        "phone": "+15550200036"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2324",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_36",
+          "title": "Premium Electronics Unit 36",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_037",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2037",
+        "email": "buyer37@gmail.com",
+        "phone": "+15550200037"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2333",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_37",
+          "title": "Gaming Accessory Pack 37",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_038",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_38@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2342",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_38",
+          "title": "Designer Jacket 38",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_039",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2039",
+        "email": "buyer39@gmail.com",
+        "phone": "+15550200039"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2351",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_39",
+          "title": "Premium Electronics Unit 39",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_040",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2040",
+        "email": "buyer40@gmail.com",
+        "phone": "+15550200040"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2360",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_40",
+          "title": "Gaming Accessory Pack 40",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_041",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_41@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2369",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_41",
+          "title": "Designer Jacket 41",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_042",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": true,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2042",
+        "email": "buyer42@gmail.com",
+        "phone": "+15550200042"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2378",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_42",
+          "title": "Premium Electronics Unit 42",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_043",
+    "scenario": "Bulk quantity multi-item purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 450,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2043",
+        "email": "buyer43@gmail.com",
+        "phone": "+15550200043"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2387",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_bulk_43",
+          "title": "Gaming Accessory Pack 43",
+          "price": 75,
+          "quantity": 6,
+          "category": "Gaming"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_044",
+    "scenario": "Guest checkout with missing phone",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 320,
+      "currency": "USD",
+      "customer": {
+        "email": "temp_user_44@proton.me"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2396",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_app_44",
+          "title": "Designer Jacket 44",
+          "price": 320,
+          "quantity": 1,
+          "category": "Apparel"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_review_045",
+    "scenario": "Elevated value purchase",
+    "groundTruth": "REVIEW",
+    "groundTruthTier": "MEDIUM",
+    "isFraud": false,
+    "transaction": {
+      "amount": 650,
+      "currency": "USD",
+      "customer": {
+        "customerId": "cust_mid_2045",
+        "email": "buyer45@gmail.com",
+        "phone": "+15550200045"
+      },
+      "paymentMethod": {
+        "cardBin": "424242",
+        "cardLast4": "2405",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mid_45",
+          "title": "Premium Electronics Unit 45",
+          "price": 650,
+          "quantity": 1,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_001",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8013",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_1",
+          "title": "Digital Gift Card 1",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_002",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8026",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_2",
+          "title": "Server Hardware Kit 2",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_003",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8039",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_3",
+          "title": "High-End Luxury Jewelry 3",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_004",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8052",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_4",
+          "title": "Digital Gift Card 4",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_005",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8065",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_5",
+          "title": "Server Hardware Kit 5",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_006",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8078",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_6",
+          "title": "High-End Luxury Jewelry 6",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_007",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8091",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_7",
+          "title": "Digital Gift Card 7",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_008",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8104",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_8",
+          "title": "Server Hardware Kit 8",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_009",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8117",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_9",
+          "title": "High-End Luxury Jewelry 9",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_010",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8130",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_10",
+          "title": "Digital Gift Card 10",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_011",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8143",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_11",
+          "title": "Server Hardware Kit 11",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_012",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8156",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_12",
+          "title": "High-End Luxury Jewelry 12",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_013",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8169",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_13",
+          "title": "Digital Gift Card 13",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_014",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8182",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_14",
+          "title": "Server Hardware Kit 14",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_015",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8195",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_15",
+          "title": "High-End Luxury Jewelry 15",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_016",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8208",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_16",
+          "title": "Digital Gift Card 16",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_017",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8221",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_17",
+          "title": "Server Hardware Kit 17",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_018",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8234",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_18",
+          "title": "High-End Luxury Jewelry 18",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_019",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8247",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_19",
+          "title": "Digital Gift Card 19",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_020",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8260",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_20",
+          "title": "Server Hardware Kit 20",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_021",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8273",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_21",
+          "title": "High-End Luxury Jewelry 21",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_022",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8286",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_22",
+          "title": "Digital Gift Card 22",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_023",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8299",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_23",
+          "title": "Server Hardware Kit 23",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_024",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8312",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_24",
+          "title": "High-End Luxury Jewelry 24",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_025",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8325",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_25",
+          "title": "Digital Gift Card 25",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_026",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8338",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_26",
+          "title": "Server Hardware Kit 26",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_027",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8351",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_27",
+          "title": "High-End Luxury Jewelry 27",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_028",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8364",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_28",
+          "title": "Digital Gift Card 28",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_029",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8377",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_29",
+          "title": "Server Hardware Kit 29",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_030",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8390",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_30",
+          "title": "High-End Luxury Jewelry 30",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_031",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8403",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_31",
+          "title": "Digital Gift Card 31",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_032",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8416",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_32",
+          "title": "Server Hardware Kit 32",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_033",
+    "scenario": "Extreme value order with missing customer data",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 2200,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8429",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_high_33",
+          "title": "High-End Luxury Jewelry 33",
+          "price": 2200,
+          "quantity": 1,
+          "category": "Jewelry"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_034",
+    "scenario": "Severe cart total mismatch anomaly",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1850,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8442",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_mismatch_34",
+          "title": "Digital Gift Card 34",
+          "price": 250,
+          "quantity": 2,
+          "category": "Digital Goods"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eval_decline_035",
+    "scenario": "High value with large quantity and anonymous identity",
+    "groundTruth": "DECLINE",
+    "groundTruthTier": "HIGH",
+    "isFraud": true,
+    "transaction": {
+      "amount": 1450,
+      "currency": "USD",
+      "customer": {},
+      "paymentMethod": {
+        "cardBin": "400000",
+        "cardLast4": "8455",
+        "cardType": "CREDIT",
+        "issuerCountry": "US"
+      },
+      "cartItems": [
+        {
+          "productId": "prod_large_elec_35",
+          "title": "Server Hardware Kit 35",
+          "price": 290,
+          "quantity": 5,
+          "category": "Electronics"
+        }
+      ]
+    }
+  }
+]

@@ -33,6 +33,8 @@ const agentTraceSchema = new mongoose.Schema(
           'RISK_VERIFICATION',
           'EVIDENCE',
           'CHARGEBACK_RESPONSE',
+          'CHARGEBACK_RESPONSE_VERIFICATION',
+          'CHARGEBACK_DECISION',
           'VERIFICATION_QA',
           'DECISION',
         ],

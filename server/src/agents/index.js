@@ -16,6 +16,8 @@ const Tool = require('./tools/Tool');
 const TransactionRiskBaselineAgent = require('./agents/TransactionRiskBaselineAgent');
 const RiskAnalystAgent = require('./agents/RiskAnalystAgent');
 const RiskVerificationAgent = require('./agents/RiskVerificationAgent');
+const ChargebackResponseAgent = require('./chargeback/ChargebackResponseAgent');
+const ChargebackResponseVerificationAgent = require('./chargeback/ChargebackResponseVerificationAgent');
 
 /**
  * Authoritative sequential workflow for transaction risk analysis.
@@ -27,6 +29,15 @@ const TRANSACTION_RISK_WORKFLOW = Object.freeze([
   'RISK_VERIFICATION',
 ]);
 
+/**
+ * Authoritative sequential workflow for defensive chargeback response generation.
+ * Response Drafting (AI advisory) -> Response Verification (deterministic guardrails).
+ */
+const CHARGEBACK_RESPONSE_WORKFLOW = Object.freeze([
+  'CHARGEBACK_RESPONSE',
+  'CHARGEBACK_RESPONSE_VERIFICATION',
+]);
+
 // Global server-side registry instance
 const defaultRegistry = new AgentRegistry();
 
@@ -34,6 +45,8 @@ const defaultRegistry = new AgentRegistry();
 defaultRegistry.register(new TransactionRiskBaselineAgent());
 defaultRegistry.register(new RiskAnalystAgent());
 defaultRegistry.register(new RiskVerificationAgent());
+defaultRegistry.register(new ChargebackResponseAgent());
+defaultRegistry.register(new ChargebackResponseVerificationAgent());
 
 // Global server-side orchestrator instance configured with default registry
 const defaultOrchestrator = new Orchestrator({
@@ -51,7 +64,11 @@ module.exports = {
   TransactionRiskBaselineAgent,
   RiskAnalystAgent,
   RiskVerificationAgent,
+  ChargebackResponseAgent,
+  ChargebackResponseVerificationAgent,
   TRANSACTION_RISK_WORKFLOW,
+  CHARGEBACK_RESPONSE_WORKFLOW,
   defaultRegistry,
   defaultOrchestrator,
 };
+

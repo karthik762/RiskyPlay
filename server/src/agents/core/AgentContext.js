@@ -59,6 +59,57 @@ function sanitizeTransactionForContext(transaction) {
   };
 }
 
+/**
+ * Sanitizes chargeback object to ensure clean serialization and no Mongoose document cycles.
+ */
+function sanitizeChargebackForContext(chargeback) {
+  if (!chargeback) return null;
+  const doc = typeof chargeback.toObject === 'function' ? chargeback.toObject() : chargeback;
+  return {
+    id: (doc._id || doc.id)?.toString(),
+    _id: (doc._id || doc.id)?.toString(),
+    caseNumber: doc.caseNumber,
+    disputeAmount: doc.disputeAmount,
+    currency: doc.currency || 'USD',
+    reasonCode: doc.reasonCode,
+    reasonCategory: doc.reasonCategory,
+    reasonDescription: doc.reasonDescription,
+    stage: doc.stage,
+    network: doc.network,
+    status: doc.status,
+    deadlineDate: doc.deadlineDate,
+    disputeDate: doc.disputeDate,
+    transactionId: doc.transactionId?.toString(),
+    merchantId: doc.merchantId?.toString(),
+  };
+}
+
+/**
+ * Sanitizes evidence index to ensure clean serialization and no Mongoose document cycles.
+ */
+function sanitizeEvidenceIndexForContext(evidenceIndex) {
+  if (!evidenceIndex) return null;
+  const doc = typeof evidenceIndex.toObject === 'function' ? evidenceIndex.toObject() : evidenceIndex;
+  const rawItems = Array.isArray(doc.items) ? doc.items : Array.isArray(doc) ? doc : [];
+  return {
+    completenessScore: doc.completenessScore,
+    missingCriticalTypes: Array.isArray(doc.missingCriticalTypes) ? [...doc.missingCriticalTypes] : [],
+    missingRecommendedTypes: Array.isArray(doc.missingRecommendedTypes) ? [...doc.missingRecommendedTypes] : [],
+    items: rawItems.map((item) => {
+      const iDoc = typeof item?.toObject === 'function' ? item.toObject() : item;
+      return {
+        id: (iDoc._id || iDoc.id)?.toString(),
+        _id: (iDoc._id || iDoc.id)?.toString(),
+        evidenceType: iDoc.evidenceType || iDoc.type || 'OTHER',
+        type: iDoc.type || iDoc.evidenceType || 'OTHER',
+        title: iDoc.title,
+        extractedFacts: iDoc.extractedFacts,
+        summary: iDoc.summary,
+      };
+    }),
+  };
+}
+
 class AgentContext {
   /**
    * @param {Object} params
@@ -75,6 +126,10 @@ class AgentContext {
     merchantId,
     transactionId,
     transaction,
+    chargebackId = null,
+    chargeback = null,
+    evidenceIndex = null,
+    entityType = null,
     deterministicAssessment = null,
     previousAgentResults = {},
     metadata = {},
@@ -85,15 +140,20 @@ class AgentContext {
     if (!merchantId || typeof merchantId !== 'string') {
       throw new TypeError('AgentContext requires an authenticated string merchantId');
     }
-    if (!transactionId || typeof transactionId !== 'string') {
+    const resolvedTxId = transactionId || (chargeback?.transactionId ? chargeback.transactionId.toString() : null);
+    if (!resolvedTxId && !chargebackId) {
       throw new TypeError('AgentContext requires a non-empty string transactionId');
     }
 
     this.runId = runId;
     this.merchantId = merchantId;
-    this.transactionId = transactionId;
+    this.transactionId = resolvedTxId || null;
     this.transaction = deepCloneAndFreeze(sanitizeTransactionForContext(transaction));
     this.deterministicAssessment = deterministicAssessment ? deepCloneAndFreeze(deterministicAssessment) : null;
+    this.chargebackId = chargebackId || null;
+    this.chargeback = chargeback ? deepCloneAndFreeze(sanitizeChargebackForContext(chargeback)) : null;
+    this.evidenceIndex = evidenceIndex ? deepCloneAndFreeze(sanitizeEvidenceIndexForContext(evidenceIndex)) : null;
+    this.entityType = entityType || (chargebackId ? 'CHARGEBACK_REBUTTAL' : 'TRANSACTION_RISK');
     this._previousAgentResults = deepCloneAndFreeze(previousAgentResults);
     this.metadata = deepCloneAndFreeze(metadata);
 
@@ -152,6 +212,10 @@ class AgentContext {
       merchantId: this.merchantId,
       transactionId: this.transactionId,
       transaction: this.transaction,
+      chargebackId: this.chargebackId,
+      chargeback: this.chargeback,
+      evidenceIndex: this.evidenceIndex,
+      entityType: this.entityType,
       deterministicAssessment: this.deterministicAssessment,
       previousAgentResults: updatedResults,
       metadata: this.metadata,

@@ -1,0 +1,23 @@
+{
+  "name": "riskyplay",
+  "version": "1.0.0",
+  "description": "RiskyPlay — Defensive AI Merchant Risk & Grounded Chargeback Rebuttal Platform",
+  "scripts": {
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "seed": "npm run seed --prefix server",
+    "evaluate": "node evaluation/scripts/evaluate.js",
+    "evaluate:generate": "node evaluation/scripts/generate_dataset.js",
+    "test:server": "npm test --prefix server",
+    "test:client": "npm run build --prefix client",
+    "test": "npm run test:server && npm run test:client"
+  },
+  "keywords": [
+    "fraud-prevention",
+    "chargeback-rebuttal",
+    "multi-agent",
+    "merchant-defense"
+  ],
+  "author": "RiskyPlay Team",
+  "license": "ISC"
+}
