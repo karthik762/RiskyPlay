@@ -29,6 +29,7 @@ const agentTraceSchema = new mongoose.Schema(
         values: [
           'ORCHESTRATOR',
           'RISK_ANALYST',
+          'TRANSACTION_RISK_BASELINE',
           'EVIDENCE',
           'CHARGEBACK_RESPONSE',
           'VERIFICATION_QA',
@@ -46,6 +47,23 @@ const agentTraceSchema = new mongoose.Schema(
         validator: Number.isInteger,
         message: 'stepIndex must be an integer',
       },
+    },
+    status: {
+      type: String,
+      enum: {
+        values: ['COMPLETED', 'FAILED', 'TIMEOUT'],
+        message: '{VALUE} is not a valid agent trace status',
+      },
+      default: 'COMPLETED',
+      index: true,
+    },
+    errorCode: {
+      type: String,
+      trim: true,
+    },
+    errorMessage: {
+      type: String,
+      trim: true,
     },
     inputData: {
       type: mongoose.Schema.Types.Mixed,

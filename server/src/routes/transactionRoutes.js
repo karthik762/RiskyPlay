@@ -57,4 +57,11 @@ router.get(
   riskController.getLatestRiskAssessment
 );
 
+// POST /api/v1/transactions/:id/risk/orchestrate - Run multi-agent risk orchestration
+router.post(
+  '/:id/risk/orchestrate',
+  validate(transactionIdParamSchema),
+  riskController.orchestrateTransactionRisk
+);
+
 module.exports = router;
