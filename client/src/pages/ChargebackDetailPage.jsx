@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { Shield, ShieldCheck, Zap, ChevronRight, Activity, FileText } from '../components/icons';
 
 export default function ChargebackDetailPage({ chargebackId, onBack }) {
   const [chargeback, setChargeback] = useState(null);
@@ -105,7 +106,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
     return (
       <div className="page-container">
         <button onClick={onBack} className="btn btn-outline btn-sm" style={{ marginBottom: '1rem' }}>
-          ← Back to Chargebacks
+          Back to Chargebacks
         </button>
         <div className="card">Dispute case not found.</div>
       </div>
@@ -114,46 +115,61 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
 
   return (
     <div className="page-container animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Top Header / Breadcrumb */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button onClick={onBack} className="btn btn-outline btn-sm">
-            ← Back to Disputes
+      {/* Top Header / Breadcrumb with Editorial Roman Hero */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '1.25rem' }}>
+        <div>
+          <button onClick={onBack} className="btn btn-outline btn-sm" style={{ marginBottom: '0.75rem' }}>
+            Back to Disputes
           </button>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-              <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-mono)' }}>
-                {chargeback.caseNumber}
-              </h1>
-              <span className="badge badge-neutral">{chargeback.network}</span>
-              <span className={`badge ${
-                chargeback.status === 'WON' ? 'badge-low' : chargeback.status === 'UNDER_REVIEW' ? 'badge-med' : 'badge-high'
-              }`}>
-                {chargeback.status}
-              </span>
-            </div>
-            <p style={{ fontSize: '0.8125rem' }}>
-              Dispute Amount: <strong style={{ color: '#ffffff' }}>${chargeback.disputeAmount?.toFixed(2)} USD</strong> • Reason: {chargeback.reasonCode} ({chargeback.reasonDescription})
-            </p>
+          <div style={{ textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+            Defensive Rebuttal Dossier
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--text-primary)', margin: '0.25rem 0' }}>
+            Defend the case.
+          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginTop: '0.5rem', fontSize: '0.85rem' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text-primary)' }}>
+              {chargeback.caseNumber}
+            </span>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span className="tabular-nums" style={{ fontWeight: 700, color: '#ffffff' }}>
+              ${chargeback.disputeAmount?.toFixed(2)} USD
+            </span>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span className="badge badge-neutral">{chargeback.network}</span>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span className={`badge ${
+              chargeback.status === 'WON' ? 'badge-low' : chargeback.status === 'UNDER_REVIEW' ? 'badge-med' : 'badge-high'
+            }`}>
+              {chargeback.status}
+            </span>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              {chargeback.reasonCode} ({chargeback.reasonDescription})
+            </span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignSelf: 'flex-end' }}>
           <button
             onClick={handleGenerateRebuttal}
             disabled={actionLoading}
             className="btn btn-primary btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            {actionLoading ? 'Processing...' : '⚡ Generate AI Rebuttal Draft'}
+            <Zap size={14} />
+            <span>{actionLoading ? 'Processing...' : 'Generate Rebuttal Draft'}</span>
           </button>
 
           <button
             onClick={handleVerifyRebuttal}
             disabled={actionLoading || !responseDraft}
             className="btn btn-cyan btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            🛡️ Run Verification Guardrail
+            <Shield size={14} />
+            <span>Run Verification Guardrail</span>
           </button>
         </div>
       </div>
@@ -164,12 +180,12 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
         gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
         gap: '0.75rem',
         padding: '0.875rem 1.25rem',
-        borderRadius: '10px',
-        background: 'rgba(15, 23, 42, 0.7)',
-        border: '1px solid var(--border-subtle)',
+        borderRadius: '8px',
+        background: 'rgba(19, 25, 54, 0.75)',
+        border: '1px solid var(--dry-sage-border)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-primary)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>1</span>
+          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--dry-sage)', color: 'var(--neon-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>1</span>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>Dispute Intake</div>
             <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Cardholder Claim</div>
@@ -177,7 +193,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-primary)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>2</span>
+          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--dry-sage)', color: 'var(--neon-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>2</span>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>Evidence Vault</div>
             <div style={{ fontSize: '0.65rem', color: '#34d399' }}>{evidenceList.length} Grounded Items</div>
@@ -185,15 +201,15 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-primary)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>3</span>
+          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--dry-sage)', color: 'var(--neon-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>3</span>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>AI Rebuttal</div>
-            <div style={{ fontSize: '0.65rem', color: '#38bdf8' }}>Advisory Drafting</div>
+            <div style={{ fontSize: '0.65rem', color: 'var(--dry-sage)' }}>Advisory Drafting</div>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#10b981', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>4</span>
+          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#34d399', color: '#0b0e1e', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>4</span>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>Deterministic Check</div>
             <div style={{ fontSize: '0.65rem', color: '#34d399' }}>0 Hallucinations</div>
@@ -201,7 +217,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#a855f7', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>5</span>
+          <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--neon-navy)', color: 'var(--dry-sage)', border: '1px solid var(--dry-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>5</span>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>Authoritative Decision</div>
             <div style={{ fontSize: '0.65rem', color: '#c084fc' }}>REPRESENT</div>
@@ -216,7 +232,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <div>
-                <h3>Evidence Vault</h3>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>Evidence Vault</h3>
                 <p style={{ fontSize: '0.8rem' }}>Immutable repository of customer authorizations and carrier proofs</p>
               </div>
               <span className="badge badge-verified">
@@ -286,7 +302,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
           {/* Linked Transaction Card */}
           {chargeback.transactionId && (
             <div className="card">
-              <h3 style={{ marginBottom: '0.75rem', fontSize: '1rem' }}>Original Transaction Context</h3>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Original Transaction Context</h3>
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
@@ -328,16 +344,16 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
                   <div style={{
                     width: '28px',
                     height: '28px',
-                    borderRadius: '8px',
+                    borderRadius: '6px',
                     background: 'rgba(16, 185, 129, 0.25)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#34d399',
                   }}>
-                    🛡️
+                    <ShieldCheck size={18} />
                   </div>
-                  <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
+                  <strong style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--text-primary)' }}>
                     Deterministic Verification Guardrail
                   </strong>
                 </div>
@@ -368,14 +384,14 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
 
                 <div style={{ padding: '0.5rem', background: 'rgba(15, 23, 42, 0.5)', borderRadius: '6px' }}>
                   <div style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>Defensive Confidence</div>
-                  <div style={{ fontWeight: 700, color: '#818cf8' }}>
+                  <div className="tabular-nums" style={{ fontWeight: 700, color: '#818cf8' }}>
                     {responseDraft.confidence || 94}%
                   </div>
                 </div>
               </div>
 
               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                All cited evidence references verified in merchant Evidence Vault. No ungrounded fraud accusations ("cardholder is lying") and zero guaranteed-win claims detected.
+                All cited evidence references verified in merchant Evidence Vault. No ungrounded fraud accusations and zero guaranteed-win claims detected.
               </p>
             </div>
           )}
@@ -384,7 +400,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <div>
-                <h3>Defensive Rebuttal Letter</h3>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>Defensive Rebuttal Letter</h3>
                 <p style={{ fontSize: '0.8rem' }}>Issuing bank submission letter citing verified Vault facts</p>
               </div>
               <span className="badge badge-neutral">
@@ -443,8 +459,10 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
                   onClick={handleGenerateRebuttal}
                   disabled={actionLoading}
                   className="btn btn-primary btn-sm"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
                 >
-                  Generate First Rebuttal Draft
+                  <Zap size={14} />
+                  <span>Generate First Rebuttal Draft</span>
                 </button>
               </div>
             )}
@@ -453,7 +471,7 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
           {/* Agent Execution Traces Feed */}
           {traces.length > 0 && (
             <div className="card">
-              <h3 style={{ marginBottom: '0.75rem', fontSize: '1rem' }}>Multi-Agent Execution Pipeline</h3>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Multi-Agent Execution Pipeline</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {traces.map((t, idx) => (
                   <div key={idx} style={{
@@ -476,8 +494,8 @@ export default function ChargebackDetailPage({ chargebackId, onBack }) {
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <span className="badge badge-low" style={{ fontSize: '0.65rem' }}>{t.status}</span>
-                      <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.latencyMs}ms</div>
+                      <span className={`badge ${t.status === 'COMPLETED' ? 'badge-low' : 'badge-high'}`} style={{ fontSize: '0.65rem' }}>{t.status}</span>
+                      <div className="tabular-nums" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.latencyMs}ms</div>
                     </div>
                   </div>
                 ))}

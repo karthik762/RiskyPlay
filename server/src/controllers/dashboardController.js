@@ -16,7 +16,13 @@ const AgentTrace = require('../models/AgentTrace');
  */
 exports.getDashboardStats = async (req, res, next) => {
   try {
-    const merchantId = req.merchant._id;
+    const rawId = req.user?.merchantId || req.merchant?._id || req.merchant?.id;
+    if (!rawId) {
+      return res.status(401).json({ success: false, message: 'Merchant context not found' });
+    }
+    const merchantId = mongoose.Types.ObjectId.isValid(rawId)
+      ? new mongoose.Types.ObjectId(rawId)
+      : rawId;
 
     // 1. Transaction aggregations
     const txStats = await Transaction.aggregate([

@@ -34,7 +34,12 @@ export default function AgentTracesPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ marginBottom: '0.25rem' }}>Multi-Agent Execution Observability</h1>
+          <div style={{ textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+            Audit & Telemetry
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--text-primary)', margin: '0.25rem 0' }}>
+            Multi-Agent Execution Observability
+          </h1>
           <p>Full audit trail of all agent reasoning steps, latencies, token consumption, and deterministic verification gates.</p>
         </div>
 
@@ -115,10 +120,10 @@ export default function AgentTracesPage() {
                     <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {t.modelUsed || 'deterministic'}
                     </td>
-                    <td style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    <td className="tabular-nums" style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                       {t.latencyMs}ms
                     </td>
-                    <td style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                    <td className="tabular-nums" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
                       {t.tokensUsed || 0}
                     </td>
                     <td>
@@ -172,7 +177,7 @@ export default function AgentTracesPage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '1rem' }}>
               <div>
-                <h3 style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-primary)' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', color: 'var(--text-primary)' }}>
                   {selectedTrace.agentName} (Step #{selectedTrace.stepIndex + 1})
                 </h3>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>

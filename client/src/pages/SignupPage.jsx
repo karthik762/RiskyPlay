@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
+import { ShieldCheck } from '../components/icons';
 
 export default function SignupPage({ onSwitchToLogin }) {
   const { register } = useAuth();
@@ -31,18 +32,31 @@ export default function SignupPage({ onSwitchToLogin }) {
       padding: '2rem',
     }}>
       <div className="card animate-fade-in" style={{
-        maxWidth: '440px',
+        maxWidth: '430px',
         width: '100%',
         padding: '2.5rem',
-        boxShadow: 'var(--shadow-lg), var(--shadow-glow)',
-        border: '1px solid var(--border-card)',
+        border: '1px solid var(--border-editorial)',
       }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.35rem' }}>
-            Register Merchant Workspace
+          <div style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '6px',
+            background: 'linear-gradient(135deg, #1d2652 0%, #131936 100%)',
+            border: '1px solid var(--dry-sage-border)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 1.25rem',
+            color: 'var(--dry-sage)',
+          }}>
+            <ShieldCheck size={22} />
+          </div>
+          <h2 style={{ marginBottom: '0.35rem' }}>
+            Register Merchant
           </h2>
-          <p style={{ fontSize: '0.875rem' }}>
-            Set up defense-only risk and dispute infrastructure
+          <p style={{ fontSize: '0.8125rem' }}>
+            Establish isolated merchant risk and dispute infrastructure
           </p>
         </div>
 
@@ -50,7 +64,7 @@ export default function SignupPage({ onSwitchToLogin }) {
           <div style={{
             background: 'var(--risk-high-bg)',
             border: '1px solid var(--risk-high-border)',
-            borderRadius: '8px',
+            borderRadius: '6px',
             padding: '0.75rem',
             color: 'var(--risk-high)',
             fontSize: '0.8125rem',
@@ -62,7 +76,7 @@ export default function SignupPage({ onSwitchToLogin }) {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <label className="input-label">Business / Merchant Name</label>
+            <label className="input-label">Business / Store Name</label>
             <input
               type="text"
               required
@@ -86,7 +100,7 @@ export default function SignupPage({ onSwitchToLogin }) {
           </div>
 
           <div>
-            <label className="input-label">Password</label>
+            <label className="input-label">Security Password</label>
             <input
               type="password"
               required
@@ -102,17 +116,17 @@ export default function SignupPage({ onSwitchToLogin }) {
             type="submit"
             disabled={loading}
             className="btn btn-primary btn-lg"
-            style={{ width: '100%', marginTop: '0.5rem' }}
+            style={{ width: '100%', marginTop: '0.35rem' }}
           >
-            {loading ? 'Creating Workspace...' : 'Create Merchant Account'}
+            {loading ? 'Registering Workspace...' : 'Create Merchant Account'}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-          Already have a merchant workspace?{' '}
+        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+          Already registered?{' '}
           <span
             onClick={onSwitchToLogin}
-            style={{ color: 'var(--accent-primary)', cursor: 'pointer', fontWeight: 600 }}
+            style={{ color: 'var(--text-accent)', cursor: 'pointer', fontWeight: 600 }}
           >
             Sign In
           </span>

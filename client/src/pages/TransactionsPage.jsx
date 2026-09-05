@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { Search, Activity, ShieldCheck, CheckCircle } from '../components/icons';
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
@@ -68,7 +69,6 @@ export default function TransactionsPage() {
       if (res?.data?.assessment) {
         setRiskAssessment(res.data.assessment);
       }
-      // Reload traces
       const tracesRes = await api.transactions.getTraces(selectedTx._id);
       if (tracesRes?.data) {
         setTraces(tracesRes.data);
@@ -95,20 +95,22 @@ export default function TransactionsPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ marginBottom: '0.25rem' }}>Transactions & Risk Engine</h1>
+          <h1 style={{ marginBottom: '0.25rem' }}>Transactions & Risk Scoring</h1>
           <p>Deterministic transaction scoring, explainable rule signals, and advisory AI analysis.</p>
         </div>
 
         {/* Filter Toolbar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <input
-            type="text"
-            placeholder="Search ID, email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="input-field"
-            style={{ width: '220px', padding: '0.5rem 0.75rem' }}
-          />
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="Search ID, email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-field"
+              style={{ width: '220px', padding: '0.5rem 0.75rem' }}
+            />
+          </div>
 
           <select
             value={statusFilter}
@@ -128,7 +130,7 @@ export default function TransactionsPage() {
         <div style={{
           background: 'var(--risk-high-bg)',
           border: '1px solid var(--risk-high-border)',
-          borderRadius: '8px',
+          borderRadius: '6px',
           padding: '1rem',
           color: 'var(--risk-high)',
         }}>
@@ -154,13 +156,13 @@ export default function TransactionsPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '2.5rem' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '3rem' }}>
                     Loading transactions...
                   </td>
                 </tr>
               ) : filteredTransactions.length === 0 ? (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '2.5rem' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '3rem' }}>
                     No transactions found.
                   </td>
                 </tr>
@@ -172,16 +174,16 @@ export default function TransactionsPage() {
                     </td>
                     <td>
                       <div style={{ color: 'var(--text-primary)' }}>{tx.customer?.email || 'N/A'}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                         {tx.customer?.billingAddress?.city}, {tx.customer?.billingAddress?.country}
                       </div>
                     </td>
-                    <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <td className="metric-val" style={{ color: 'var(--text-primary)' }}>
                       ${(tx.amount || 0).toFixed(2)} {tx.currency}
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
-                        {tx.paymentMethod?.cardType} •••• {tx.paymentMethod?.cardLast4}
+                      <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                        {tx.paymentMethod?.cardType} &bull;&bull;&bull;&bull; {tx.paymentMethod?.cardLast4}
                       </span>
                     </td>
                     <td>
@@ -195,7 +197,7 @@ export default function TransactionsPage() {
                         {tx.status}
                       </span>
                     </td>
-                    <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    <td style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                       {new Date(tx.timestamp || tx.createdAt).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -230,8 +232,8 @@ export default function TransactionsPage() {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(6px)',
+          background: 'rgba(0, 0, 0, 0.78)',
+          backdropFilter: 'blur(8px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -245,14 +247,13 @@ export default function TransactionsPage() {
             overflowY: 'auto',
             padding: '2rem',
             background: 'var(--bg-panel)',
-            border: '1px solid var(--border-accent)',
-            boxShadow: 'var(--shadow-lg), var(--shadow-glow)',
+            border: '1px solid var(--border-editorial)',
           }}>
             {/* Modal Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-subtle)' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <h2 style={{ fontSize: '1.35rem', fontFamily: 'var(--font-mono)' }}>
+                  <h2 style={{ fontSize: '1.4rem' }}>
                     {selectedTx.externalTransactionId}
                   </h2>
                   <span className={`badge ${
@@ -261,8 +262,8 @@ export default function TransactionsPage() {
                     {selectedTx.status}
                   </span>
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                  Amount: ${selectedTx.amount} {selectedTx.currency} • Customer: {selectedTx.customer?.email}
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                  Amount: ${selectedTx.amount} {selectedTx.currency} &bull; Customer: {selectedTx.customer?.email}
                 </div>
               </div>
 
@@ -272,7 +273,8 @@ export default function TransactionsPage() {
                   disabled={orchestrating}
                   className="btn btn-primary btn-sm"
                 >
-                  {orchestrating ? 'Orchestrating...' : 'Run 3-Agent Orchestration'}
+                  <Activity size={14} />
+                  <span>{orchestrating ? 'Orchestrating...' : 'Run 3-Agent Orchestration'}</span>
                 </button>
                 <button
                   onClick={() => setSelectedTx(null)}
@@ -294,21 +296,21 @@ export default function TransactionsPage() {
                     gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
                     gap: '1rem',
                     padding: '1.25rem',
-                    borderRadius: '10px',
-                    background: 'rgba(30, 41, 59, 0.4)',
+                    borderRadius: '6px',
+                    background: 'rgba(18, 27, 46, 0.5)',
                     border: '1px solid var(--border-card)',
                   }}>
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Deterministic Score</div>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                      <div className="label-editorial">Deterministic Score</div>
+                      <div className="metric-val" style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginTop: '0.2rem' }}>
                         {riskAssessment.riskScore}
-                        <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}> / 100</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}> / 100</span>
                       </div>
                     </div>
 
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Risk Tier</div>
-                      <div style={{ marginTop: '0.25rem' }}>
+                      <div className="label-editorial">Risk Tier</div>
+                      <div style={{ marginTop: '0.4rem' }}>
                         <span className={`badge ${
                           riskAssessment.riskTier === 'LOW' ? 'badge-low' : riskAssessment.riskTier === 'HIGH' ? 'badge-high' : 'badge-med'
                         }`}>
@@ -318,8 +320,8 @@ export default function TransactionsPage() {
                     </div>
 
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Authoritative Action</div>
-                      <div style={{ marginTop: '0.25rem' }}>
+                      <div className="label-editorial">Authoritative Action</div>
+                      <div style={{ marginTop: '0.4rem' }}>
                         <span className={`badge ${
                           riskAssessment.recommendation === 'APPROVE' ? 'badge-approve' : riskAssessment.recommendation === 'DECLINE' ? 'badge-decline' : 'badge-review'
                         }`}>
@@ -329,8 +331,8 @@ export default function TransactionsPage() {
                     </div>
 
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>AI Advisory Score</div>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#818cf8' }}>
+                      <div className="label-editorial">AI Advisory Score</div>
+                      <div className="metric-val" style={{ fontSize: '1.75rem', color: '#818cf8', marginTop: '0.2rem' }}>
                         {riskAssessment.aiScore ?? 'N/A'}
                       </div>
                     </div>
@@ -340,21 +342,23 @@ export default function TransactionsPage() {
                 {/* 2. Deterministic Rule Triggers */}
                 {riskAssessment?.ruleMatches?.length > 0 && (
                   <div>
-                    <h4 style={{ marginBottom: '0.5rem', fontSize: '0.95rem' }}>Deterministic Rules Fired</h4>
+                    <h3 className="section-title" style={{ marginBottom: '0.6rem', fontSize: '1.1rem' }}>
+                      Deterministic Rules Fired
+                    </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {riskAssessment.ruleMatches.map((r, idx) => (
                         <div key={idx} style={{
                           padding: '0.75rem 1rem',
-                          borderRadius: '8px',
-                          background: 'rgba(15, 23, 42, 0.6)',
+                          borderRadius: '6px',
+                          background: 'rgba(12, 18, 32, 0.6)',
                           border: '1px solid var(--border-subtle)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                         }}>
                           <div>
-                            <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{r.ruleName || r.rule}</div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{r.reason}</div>
+                            <div style={{ fontWeight: 600, fontSize: '0.8125rem' }}>{r.ruleName || r.rule}</div>
+                            <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>{r.reason}</div>
                           </div>
                           <span className="badge badge-neutral">+{r.points} pts</span>
                         </div>
@@ -367,29 +371,34 @@ export default function TransactionsPage() {
                 {riskAssessment?.aiAnalysis && (
                   <div style={{
                     padding: '1.25rem',
-                    borderRadius: '10px',
-                    background: 'rgba(99, 102, 241, 0.08)',
-                    border: '1px solid rgba(99, 102, 241, 0.25)',
+                    borderRadius: '6px',
+                    background: 'rgba(67, 56, 202, 0.08)',
+                    border: '1px solid rgba(129, 140, 248, 0.25)',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#a5b4fc' }}>
+                        <span style={{
+                          fontFamily: 'var(--font-display)',
+                          fontWeight: 600,
+                          fontSize: '0.95rem',
+                          color: '#ffffff',
+                        }}>
                           AI Risk Analyst Advisory Assessment
                         </span>
-                        <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>Advisory Only</span>
+                        <span className="badge badge-neutral" style={{ fontSize: '0.6rem' }}>Advisory Only</span>
                       </div>
-                      <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>
+                      <span className="badge badge-verified" style={{ fontSize: '0.65rem' }}>
                         Status: {riskAssessment.aiAnalysis.status}
                       </span>
                     </div>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
                       {riskAssessment.aiAnalysis.summary}
                     </p>
 
                     {riskAssessment.aiAnalysis.riskFactors?.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {riskAssessment.aiAnalysis.riskFactors.map((rf, idx) => (
-                          <span key={idx} className="badge badge-neutral" style={{ fontSize: '0.75rem' }}>
+                          <span key={idx} className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
                             {rf.code}: {rf.description}
                           </span>
                         ))}
@@ -401,13 +410,15 @@ export default function TransactionsPage() {
                 {/* 4. Agent Trace Timeline */}
                 {traces.length > 0 && (
                   <div>
-                    <h4 style={{ marginBottom: '0.75rem', fontSize: '0.95rem' }}>Multi-Agent Execution Log</h4>
+                    <h3 className="section-title" style={{ marginBottom: '0.6rem', fontSize: '1.1rem' }}>
+                      Multi-Agent Execution Log
+                    </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {traces.map((trace, idx) => (
                         <div key={idx} style={{
                           padding: '0.75rem 1rem',
-                          borderRadius: '8px',
-                          background: 'rgba(15, 23, 42, 0.8)',
+                          borderRadius: '6px',
+                          background: 'rgba(12, 18, 32, 0.8)',
                           border: '1px solid var(--border-subtle)',
                           display: 'flex',
                           alignItems: 'center',
@@ -416,7 +427,7 @@ export default function TransactionsPage() {
                           fontSize: '0.75rem',
                         }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <span style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>
+                            <span style={{ color: '#818cf8', fontWeight: 600 }}>
                               Step {trace.stepIndex + 1}: {trace.agentName}
                             </span>
                             <span style={{ color: 'var(--text-muted)' }}>
@@ -426,7 +437,7 @@ export default function TransactionsPage() {
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <span style={{ color: 'var(--text-muted)' }}>{trace.latencyMs}ms</span>
-                            <span className="badge badge-low" style={{ fontSize: '0.65rem' }}>{trace.status}</span>
+                            <span className="badge badge-low" style={{ fontSize: '0.6rem' }}>{trace.status}</span>
                           </div>
                         </div>
                       ))}

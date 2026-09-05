@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import ChargebackDetailPage from './ChargebackDetailPage';
+import { ShieldCheck, ChevronRight } from '../components/icons';
 
 export default function ChargebacksPage({ selectedChargebackId, setSelectedChargebackId }) {
   const [chargebacks, setChargebacks] = useState([]);
@@ -44,7 +45,12 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
       {/* Header & Filter */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ marginBottom: '0.25rem' }}>Chargeback Defense Portal</h1>
+          <div style={{ textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+            Merchant Defense
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--text-primary)', margin: '0.25rem 0' }}>
+            Chargeback Defense Portal
+          </h1>
           <p>Automated evidence retrieval, grounded rebuttal generation, and deterministic defense decisions.</p>
         </div>
 
@@ -66,9 +72,9 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
 
       {/* Featured Showcase Dispute Card */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%)',
-        border: '1px solid var(--border-accent)',
-        borderRadius: '12px',
+        background: 'linear-gradient(135deg, rgba(19, 25, 54, 0.95) 0%, rgba(14, 19, 41, 0.95) 100%)',
+        border: '1px solid var(--dry-sage-border)',
+        borderRadius: '8px',
         padding: '1.5rem',
         display: 'flex',
         alignItems: 'center',
@@ -80,18 +86,16 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
           <div style={{
             width: '48px',
             height: '48px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+            borderRadius: '8px',
+            background: 'linear-gradient(135deg, #1d2652 0%, #131936 100%)',
+            border: '1px solid var(--dry-sage-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#fff',
-            boxShadow: '0 0 15px rgba(99, 102, 241, 0.4)',
+            color: 'var(--dry-sage)',
+            boxShadow: '0 0 15px rgba(174, 169, 137, 0.25)',
           }}>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-              <path d="m9 12 2 2 4-4" />
-            </svg>
+            <ShieldCheck size={26} />
           </div>
 
           <div>
@@ -99,7 +103,7 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
               <span style={{ fontSize: '1.1rem', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                 CB-2026-8891
               </span>
-              <span className="badge badge-high">$1,249.99 USD</span>
+              <span className="badge badge-high tabular-nums">$1,249.99 USD</span>
               <span className="badge badge-neutral">Visa 10.4 Fraud</span>
               <span className="badge badge-verified">4 Vault Items</span>
             </div>
@@ -117,11 +121,10 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
             }
           }}
           className="btn btn-primary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
         >
           <span>Open Full Defense Showcase</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
+          <ChevronRight size={16} />
         </button>
       </div>
 
@@ -188,7 +191,7 @@ export default function ChargebacksPage({ selectedChargebackId, setSelectedCharg
                         {cb.reasonDescription || 'Disputed Transaction'}
                       </div>
                     </td>
-                    <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <td className="tabular-nums" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                       ${(cb.disputeAmount || 0).toFixed(2)} USD
                     </td>
                     <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>

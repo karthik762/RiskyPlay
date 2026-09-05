@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Activity, RefreshCw } from '../components/icons';
 
 // Pre-loaded benchmark results from Phase B evaluation system
 const BENCHMARK_DATA = {
@@ -50,7 +51,12 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ marginBottom: '0.25rem' }}>Evaluation Benchmark & Financial Modeling</h1>
+          <div style={{ textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+            Financial Economics
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--text-primary)', margin: '0.25rem 0' }}>
+            Evaluation Benchmark & Financial Modeling
+          </h1>
           <p>Rigorous offline testing across 150 labeled edge-case transactions with merchant-loss economics.</p>
         </div>
 
@@ -58,30 +64,32 @@ export default function AnalyticsPage() {
           onClick={handleReRun}
           disabled={evaluating}
           className="btn btn-primary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
         >
-          {evaluating ? 'Computing Engine Metrics...' : '⚡ Re-run Benchmark Suite'}
+          <Activity size={15} />
+          <span>{evaluating ? 'Computing Engine Metrics...' : 'Re-run Benchmark Suite'}</span>
         </button>
       </div>
 
       {/* Top Metrics Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
             Net Fraud Savings
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#34d399', letterSpacing: '-0.03em' }}>
+          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: '#34d399', letterSpacing: '-0.03em' }}>
             +${data.financialModel.netSavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+          <div className="tabular-nums" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             {data.financialModel.roiPercent}% Reduction in unmanaged loss
           </div>
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
             Test Cases Evaluated
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
             {data.summary.totalEvaluated}
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
@@ -90,10 +98,10 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
             Approve Precision
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#818cf8', letterSpacing: '-0.03em' }}>
+          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: '#818cf8', letterSpacing: '-0.03em' }}>
             {data.perClass.APPROVE.precision}%
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
@@ -102,10 +110,10 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
             Critical False Negatives
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f43f5e', letterSpacing: '-0.03em' }}>
+          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: '#f43f5e', letterSpacing: '-0.03em' }}>
             {cm.DECLINE.APPROVE} Cases
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
@@ -118,7 +126,7 @@ export default function AnalyticsPage() {
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div>
-            <h3>3x3 Confusion Matrix Distribution</h3>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>3x3 Confusion Matrix Distribution</h3>
             <p style={{ fontSize: '0.8125rem' }}>Actual ground truth labeled tier vs. engine predicted decision</p>
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -198,7 +206,7 @@ export default function AnalyticsPage() {
       {/* Financial Economics Explainer */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem' }}>
         <div className="card">
-          <h3 style={{ marginBottom: '0.75rem' }}>Financial Loss Formula</h3>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Financial Loss Formula</h3>
           <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
             Merchant risk systems cannot be evaluated on raw statistical accuracy alone. A false positive costs customer friction ($15), whereas an undetected fraudulent transaction costs merchant merchandise loss and network chargeback fees ($125).
           </p>
@@ -223,7 +231,7 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card">
-          <h3 style={{ marginBottom: '0.75rem' }}>Defense Guardrail Invariants</h3>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Defense Guardrail Invariants</h3>
           <ul style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', paddingLeft: '1.25rem', lineHeight: 1.8 }}>
             <li><strong>Zero Hallucinated Citations:</strong> Rebuttal drafts cannot reference evidence IDs not registered in the Vault.</li>
             <li><strong>Zero Ungrounded Fraud Accusations:</strong> Speculative accusations without evidence are deterministically rejected.</li>

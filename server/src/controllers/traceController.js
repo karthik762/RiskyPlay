@@ -26,7 +26,14 @@ async function verifyEntityOwnership(entityId, merchantId) {
  */
 exports.getTraces = async (req, res, next) => {
   try {
-    const merchantId = req.merchant._id;
+    const rawId = req.user?.merchantId || req.merchant?._id || req.merchant?.id;
+    if (!rawId) {
+      return res.status(401).json({ success: false, message: 'Merchant context not found' });
+    }
+    const merchantId = mongoose.Types.ObjectId.isValid(rawId)
+      ? new mongoose.Types.ObjectId(rawId)
+      : rawId;
+
     const { runId, entityType, agentName, status, limit = 50, page = 1 } = req.query;
 
     // Retrieve all entity IDs owned by this merchant
@@ -86,7 +93,12 @@ exports.getEntityTraces = async (req, res, next) => {
       });
     }
 
-    const isAuthorized = await verifyEntityOwnership(entityId, req.merchant._id);
+    const rawId = req.user?.merchantId || req.merchant?._id || req.merchant?.id;
+    if (!rawId) {
+      return res.status(401).json({ success: false, message: 'Merchant context not found' });
+    }
+
+    const isAuthorized = await verifyEntityOwnership(entityId, rawId);
     if (!isAuthorized) {
       return res.status(404).json({
         success: false,

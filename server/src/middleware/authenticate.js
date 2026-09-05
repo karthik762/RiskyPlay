@@ -29,6 +29,10 @@ function authenticate(req, res, next) {
     req.user = {
       merchantId: decoded.sub,
     };
+    req.merchant = {
+      _id: decoded.sub,
+      id: decoded.sub,
+    };
 
     next();
   } catch (error) {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
+import { ShieldCheck, Zap } from '../components/icons';
 
 export default function LoginPage({ onSwitchToSignup }) {
   const { login, fillDemo } = useAuth();
@@ -37,55 +38,57 @@ export default function LoginPage({ onSwitchToSignup }) {
       padding: '2rem',
     }}>
       <div className="card animate-fade-in" style={{
-        maxWidth: '440px',
+        maxWidth: '430px',
         width: '100%',
         padding: '2.5rem',
-        boxShadow: 'var(--shadow-lg), var(--shadow-glow)',
-        border: '1px solid var(--border-accent)',
+        border: '1px solid var(--border-editorial)',
       }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+            width: '42px',
+            height: '42px',
+            borderRadius: '6px',
+            background: 'linear-gradient(135deg, #1d2652 0%, #131936 100%)',
+            border: '1px solid var(--dry-sage-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 1rem',
-            boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)',
+            margin: '0 auto 1.25rem',
+            color: 'var(--dry-sage)',
           }}>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" />
-              <path d="m9 12 2 2 4-4" />
-            </svg>
+            <ShieldCheck size={22} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.35rem' }}>
-            Welcome to RiskyPlay
+          <h2 style={{ marginBottom: '0.35rem' }}>
+            Merchant Workspace
           </h2>
-          <p style={{ fontSize: '0.875rem' }}>
-            Defensive AI Merchant Risk & Chargeback Platform
+          <p style={{ fontSize: '0.8125rem' }}>
+            Defensive AI Risk & Grounded Dispute Intelligence
           </p>
         </div>
 
-        {/* Quick Demo Fill Banner */}
+        {/* Quick Demo Fill Banner (Clean SVG, NO emojis) */}
         <div style={{
-          background: 'rgba(99, 102, 241, 0.1)',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
-          borderRadius: '8px',
-          padding: '0.875rem',
+          background: 'var(--dry-sage-bg)',
+          border: '1px solid var(--dry-sage-border)',
+          borderRadius: '6px',
+          padding: '0.85rem 1rem',
           marginBottom: '1.5rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '0.75rem',
         }}>
-          <div>
-            <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#a5b4fc' }}>
-              ⚡ Instant Demo Access
-            </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              Populates seeded merchant credentials
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+            <span style={{ color: '#a5b4fc' }}>
+              <Zap size={16} />
+            </span>
+            <div>
+              <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#c7d2fe' }}>
+                Instant Demo Access
+              </div>
+              <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                Populates seeded merchant credentials
+              </div>
             </div>
           </div>
           <button
@@ -101,7 +104,7 @@ export default function LoginPage({ onSwitchToSignup }) {
           <div style={{
             background: 'var(--risk-high-bg)',
             border: '1px solid var(--risk-high-border)',
-            borderRadius: '8px',
+            borderRadius: '6px',
             padding: '0.75rem',
             color: 'var(--risk-high)',
             fontSize: '0.8125rem',
@@ -113,7 +116,7 @@ export default function LoginPage({ onSwitchToSignup }) {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <label className="input-label">Merchant Email</label>
+            <label className="input-label">Merchant Work Email</label>
             <input
               type="email"
               required
@@ -125,7 +128,7 @@ export default function LoginPage({ onSwitchToSignup }) {
           </div>
 
           <div>
-            <label className="input-label">Password</label>
+            <label className="input-label">Security Password</label>
             <input
               type="password"
               required
@@ -140,17 +143,17 @@ export default function LoginPage({ onSwitchToSignup }) {
             type="submit"
             disabled={loading}
             className="btn btn-primary btn-lg"
-            style={{ width: '100%', marginTop: '0.5rem' }}
+            style={{ width: '100%', marginTop: '0.35rem' }}
           >
-            {loading ? 'Authenticating...' : 'Sign In to Dashboard'}
+            {loading ? 'Authenticating...' : 'Sign In to Workspace'}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
           Need a new merchant workspace?{' '}
           <span
             onClick={onSwitchToSignup}
-            style={{ color: 'var(--accent-primary)', cursor: 'pointer', fontWeight: 600 }}
+            style={{ color: 'var(--text-accent)', cursor: 'pointer', fontWeight: 600 }}
           >
             Register Merchant
           </span>

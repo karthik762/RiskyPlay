@@ -37,15 +37,34 @@ async function request(endpoint, options = {}) {
     config.body = JSON.stringify(config.body);
   }
 
-  const response = await fetch(`${API_BASE}${endpoint}`, config);
+  let response;
+  try {
+    response = await fetch(`${API_BASE}${endpoint}`, config);
+  } catch (netErr) {
+    const error = new Error('Cannot connect to backend server. Please ensure the backend is running on port 5000 (npm run dev in /server).');
+    error.isNetworkError = true;
+    throw error;
+  }
+
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    const error = new Error(data?.error?.message || data?.message || 'Request failed');
+    let msg = data?.error?.message || data?.message;
+    if (!msg) {
+      if (response.status === 502 || response.status === 504) {
+        msg = 'Backend server is offline (Port 5000 unreachable). Start the backend with "npm run dev:server".';
+      } else if (response.status === 401) {
+        msg = 'Invalid credentials. Click "Auto-Fill" to use the demo merchant account.';
+      } else {
+        msg = `Request failed (${response.status}: ${response.statusText || 'Server Error'})`;
+      }
+    }
+    const error = new Error(msg);
     error.status = response.status;
     error.data = data;
     throw error;
   }
+
 
   return data;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { Shield, ChevronRight, AlertTriangle, Activity } from '../components/icons';
 
 export default function DashboardPage({ setActiveTab, setSelectedChargebackId }) {
   const [stats, setStats] = useState(null);
@@ -27,9 +28,9 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
 
   if (loading) {
     return (
-      <div className="page-container" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-        <div style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
-          Loading merchant defense metrics...
+      <div className="page-container" style={{ textAlign: 'center', padding: '5rem 2rem' }}>
+        <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>
+          Retrieving merchant defense metrics...
         </div>
       </div>
     );
@@ -41,9 +42,10 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
         <div style={{
           background: 'var(--risk-high-bg)',
           border: '1px solid var(--risk-high-border)',
-          borderRadius: '8px',
+          borderRadius: '6px',
           padding: '1.25rem',
           color: 'var(--risk-high)',
+          fontSize: '0.875rem',
         }}>
           Error loading dashboard: {error}
         </div>
@@ -63,11 +65,11 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
 
   return (
     <div className="page-container animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Header & Quick Action */}
+      {/* Editorial Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ marginBottom: '0.25rem' }}>Merchant Defense Dashboard</h1>
-          <p>Real-time transaction risk monitoring, automated evidence collection, and grounded chargeback rebuttals.</p>
+          <h1 style={{ marginBottom: '0.25rem' }}>Merchant Defense Overview</h1>
+          <p>Real-time transaction risk scoring, evidence intelligence, and grounded chargeback rebuttals.</p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -75,9 +77,7 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
             onClick={() => setActiveTab('chargebacks')}
             className="btn btn-primary"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-            </svg>
+            <Shield size={15} />
             <span>Chargeback Defense Portal</span>
           </button>
 
@@ -85,49 +85,53 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
             onClick={() => setActiveTab('analytics')}
             className="btn btn-outline"
           >
+            <Activity size={15} />
             <span>Run Benchmark</span>
           </button>
         </div>
       </div>
 
-      {/* Primary Demo Highlight Banner */}
+      {/* Primary Showcase Banner — Editorial Typography, NO Emojis */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
-        border: '1px solid var(--border-accent)',
-        borderRadius: '12px',
-        padding: '1.25rem 1.5rem',
+        background: 'linear-gradient(135deg, rgba(19, 25, 54, 0.95) 0%, rgba(14, 19, 41, 0.95) 100%)',
+        border: '1px solid var(--dry-sage-border)',
+        borderRadius: '8px',
+        padding: '1.35rem 1.75rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: '1rem',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '10px',
-            background: 'rgba(99, 102, 241, 0.25)',
-            border: '1px solid rgba(99, 102, 241, 0.5)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '6px',
+            background: 'rgba(174, 169, 137, 0.15)',
+            border: '1px solid var(--dry-sage-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#a5b4fc',
+            color: 'var(--dry-sage)',
           }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
+            <AlertTriangle size={20} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-              <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>Primary Demo Showcase Case: CB-2026-8891</span>
-              <span className="badge badge-high">$1,249.99 USD</span>
-              <span className="badge badge-med">Visa 10.4</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.2rem' }}>
+              <span style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                fontSize: '1.05rem',
+                color: 'var(--text-cream)',
+              }}>
+                Primary Demo Showcase: CB-2026-8891
+              </span>
+              <span className="badge badge-high tabular-nums">$1,249.99 USD</span>
+              <span className="badge badge-neutral">Visa 10.4</span>
             </div>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-              Cardholder unrecognized charge claim. 4 verified Evidence Vault artifacts attached. Deterministically verified rebuttal ready.
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+              Cardholder unrecognized charge dispute. 4 verified Evidence Vault artifacts attached. Deterministically verified rebuttal ready.
             </div>
           </div>
         </div>
@@ -140,118 +144,116 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
             }
             setActiveTab('chargebacks');
           }}
-          className="btn btn-cyan btn-sm"
+          className="btn btn-primary btn-sm"
         >
           <span>Inspect Case & Rebuttal</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
+          <ChevronRight size={14} />
         </button>
       </div>
 
-      {/* KPI Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+      {/* KPI Metric Cards — Strict Typography (Editorial Label + Large Tabular Number) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '1.25rem' }}>
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="label-editorial" style={{ marginBottom: '0.4rem' }}>
             Protected Revenue
           </div>
-          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#34d399', letterSpacing: '-0.03em' }}>
+          <div className="metric-val" style={{ fontSize: '1.875rem', color: '#34d399' }}>
             ${(cb.wonAmount || 450).toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-            Recovered from fraudulent claims
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            Recovered merchant capital
           </div>
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="label-editorial" style={{ marginBottom: '0.4rem' }}>
             Transaction Volume
           </div>
-          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+          <div className="metric-val" style={{ fontSize: '1.875rem', color: 'var(--text-primary)' }}>
             ${(tx.totalVolume || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
             {tx.totalCount || 0} evaluated orders
           </div>
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="label-editorial" style={{ marginBottom: '0.4rem' }}>
             Dispute Win Rate
           </div>
-          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#818cf8', letterSpacing: '-0.03em' }}>
+          <div className="metric-val" style={{ fontSize: '1.875rem', color: 'var(--dry-sage)' }}>
             {cb.winRate || 100}%
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-            On resolved bank representments
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            Resolved representments
           </div>
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="label-editorial" style={{ marginBottom: '0.4rem' }}>
             Chargeback Rate
           </div>
-          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#38bdf8', letterSpacing: '-0.03em' }}>
+          <div className="metric-val" style={{ fontSize: '1.875rem', color: 'var(--text-cream)' }}>
             {cb.chargebackRate || 0.35}%
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#34d399', marginTop: '0.25rem', fontWeight: 500 }}>
-            Well below 0.90% network threshold
+          <div style={{ fontSize: '0.75rem', color: '#34d399', marginTop: '0.2rem', fontWeight: 500 }}>
+            Below 0.90% network threshold
           </div>
         </div>
 
         <div className="card">
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="label-editorial" style={{ marginBottom: '0.4rem' }}>
             Guardrail Latency
           </div>
-          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+          <div className="metric-val" style={{ fontSize: '1.875rem', color: 'var(--text-primary)' }}>
             {defense.avgLatencyMs || 18}ms
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
             0 Grounding Hallucinations
           </div>
         </div>
       </div>
 
-      {/* Risk Distribution Breakdown */}
+      {/* Risk Exposure Section Title (Serif) & Segmented Distribution */}
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h3>Transaction Risk Tier Distribution</h3>
+            <h3 className="section-title">Risk Exposure</h3>
             <p style={{ fontSize: '0.8125rem' }}>Authoritative deterministic rule scoring breakdown across all merchant orders</p>
           </div>
-          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-            {totalAssessed} total transactions
+          <div className="label-editorial">
+            {totalAssessed} Total Transactions
           </div>
         </div>
 
         {/* Segmented Bar */}
         <div style={{
-          height: '14px',
+          height: '10px',
           width: '100%',
-          borderRadius: '9999px',
+          borderRadius: '4px',
           overflow: 'hidden',
           display: 'flex',
-          background: '#1e293b',
+          background: '#111a2e',
         }}>
           <div style={{ width: `${lowPct}%`, background: 'var(--risk-low)', transition: 'width 0.5s' }} title={`LOW: ${lowPct}%`} />
           <div style={{ width: `${medPct}%`, background: 'var(--risk-med)', transition: 'width 0.5s' }} title={`MEDIUM: ${medPct}%`} />
           <div style={{ width: `${highPct}%`, background: 'var(--risk-high)', transition: 'width 0.5s' }} title={`HIGH: ${highPct}%`} />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '0.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
           <div style={{
             background: 'var(--risk-low-bg)',
             border: '1px solid var(--risk-low-border)',
-            borderRadius: '8px',
+            borderRadius: '6px',
             padding: '1rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
               <span className="badge badge-low">APPROVE (Low)</span>
-              <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--risk-low)' }}>
+              <span className="metric-val" style={{ fontSize: '1.15rem', color: '#34d399' }}>
                 {risk.distribution?.LOW || 0}
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
               Score 0–29: Instant authorized fulfillment
             </div>
           </div>
@@ -259,45 +261,45 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
           <div style={{
             background: 'var(--risk-med-bg)',
             border: '1px solid var(--risk-med-border)',
-            borderRadius: '8px',
+            borderRadius: '6px',
             padding: '1rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
               <span className="badge badge-med">REVIEW (Medium)</span>
-              <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--risk-med)' }}>
+              <span className="metric-val" style={{ fontSize: '1.15rem', color: '#fbbf24' }}>
                 {risk.distribution?.MEDIUM || 0}
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Score 30–69: Manual review & 3DS friction
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+              Score 30–69: Secondary verification required
             </div>
           </div>
 
           <div style={{
             background: 'var(--risk-high-bg)',
             border: '1px solid var(--risk-high-border)',
-            borderRadius: '8px',
+            borderRadius: '6px',
             padding: '1rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
               <span className="badge badge-high">DECLINE (High)</span>
-              <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--risk-high)' }}>
+              <span className="metric-val" style={{ fontSize: '1.15rem', color: '#f87171' }}>
                 {risk.distribution?.HIGH || 0}
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
               Score 70–100: Blocked to prevent chargeback loss
             </div>
           </div>
         </div>
       </div>
 
-      {/* Recent High-Priority Cases Feed */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '1.5rem' }}>
+      {/* Editorial Feeds: Dispute Pipeline & Recent Transactions */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))', gap: '1.5rem' }}>
         {/* Chargebacks Feed */}
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h3>Dispute Pipeline</h3>
+            <h3 className="section-title">Dispute Pipeline</h3>
             <button
               onClick={() => setActiveTab('chargebacks')}
               className="btn btn-outline btn-sm"
@@ -306,7 +308,7 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
             {(stats?.recentChargebacks || []).map((c) => (
               <div
                 key={c._id}
@@ -318,9 +320,9 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.875rem',
-                  borderRadius: '8px',
-                  background: 'rgba(30, 41, 59, 0.4)',
+                  padding: '0.85rem 1rem',
+                  borderRadius: '6px',
+                  background: 'rgba(18, 27, 46, 0.45)',
                   border: '1px solid var(--border-subtle)',
                   cursor: 'pointer',
                   transition: 'border-color 0.15s ease',
@@ -331,7 +333,7 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
                     <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                       {c.caseNumber}
                     </span>
-                    <span className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
+                    <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>
                       {c.network}
                     </span>
                   </div>
@@ -341,10 +343,10 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <div className="metric-val" style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>
                     ${(c.disputeAmount || 0).toFixed(2)}
                   </div>
-                  <span className={`badge ${c.status === 'WON' ? 'badge-low' : c.status === 'OPEN' ? 'badge-high' : 'badge-med'}`} style={{ fontSize: '0.65rem' }}>
+                  <span className={`badge ${c.status === 'WON' ? 'badge-low' : c.status === 'OPEN' ? 'badge-high' : 'badge-med'}`} style={{ fontSize: '0.625rem' }}>
                     {c.status}
                   </span>
                 </div>
@@ -356,7 +358,7 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
         {/* Transactions Feed */}
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h3>Recent Transactions</h3>
+            <h3 className="section-title">Recent Transactions</h3>
             <button
               onClick={() => setActiveTab('transactions')}
               className="btn btn-outline btn-sm"
@@ -365,7 +367,7 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
             {(stats?.recentTransactions || []).map((t) => (
               <div
                 key={t._id}
@@ -374,27 +376,27 @@ export default function DashboardPage({ setActiveTab, setSelectedChargebackId })
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.875rem',
-                  borderRadius: '8px',
-                  background: 'rgba(30, 41, 59, 0.4)',
+                  padding: '0.85rem 1rem',
+                  borderRadius: '6px',
+                  background: 'rgba(18, 27, 46, 0.45)',
                   border: '1px solid var(--border-subtle)',
                   cursor: 'pointer',
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem' }}>
                     {t.externalTransactionId}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                     {t.customer?.email || 'customer@verified.com'}
                   </div>
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <div className="metric-val" style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>
                     ${(t.amount || 0).toFixed(2)}
                   </div>
-                  <span className={`badge ${t.status === 'APPROVED' ? 'badge-low' : t.status === 'DECLINED' ? 'badge-high' : 'badge-med'}`} style={{ fontSize: '0.65rem' }}>
+                  <span className={`badge ${t.status === 'APPROVED' ? 'badge-low' : t.status === 'DECLINED' ? 'badge-high' : 'badge-med'}`} style={{ fontSize: '0.625rem' }}>
                     {t.status}
                   </span>
                 </div>
